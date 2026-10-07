@@ -30,7 +30,7 @@ try {
 </script>
 <style>
 /* =====================================================================
-   Staffelbar – Gestaltung
+   Staffelbar, Gestaltung
 
    Monochrom: keine Farbe, nur Kontrast, Flaeche und Typografie. Hell und
    dunkel folgen der Systemeinstellung.
@@ -51,8 +51,8 @@ try {
   --line:#e6e6e9;
   --line-2:#d2d2d7;
   --fg:#0b0b0d;
-  --fg-dim:#55555c;      /* 7,3:1 – Fliesstext zweiter Ordnung */
-  --fg-faint:#6b6b73;    /* 5,3:1 – Hilfstexte, fruehe 2,8:1 waren unlesbar */
+  --fg-dim:#55555c;      /* 7,3:1, Fliesstext zweiter Ordnung */
+  --fg-faint:#6b6b73;    /* 5,3:1, Hilfstexte, fruehe 2,8:1 waren unlesbar */
   --accent:#0b0b0d;
   --accent-ink:#ffffff;
   --ring:rgba(11,11,13,.08);
@@ -65,7 +65,7 @@ try {
   --safe-b:env(safe-area-inset-bottom,0);
 }
 /* Dunkel gilt in zwei Faellen: das System steht darauf und niemand hat
-   ausdruecklich Hell gewaehlt – oder Dunkel ist ausdruecklich gewaehlt.
+   ausdruecklich Hell gewaehlt, oder Dunkel ist ausdruecklich gewaehlt.
    Deshalb steht derselbe Satz Farben zweimal da. */
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -108,11 +108,69 @@ html,body{margin:0;padding:0}
       iOS zwei Ziffern sonst als Doppeltipp und vergroessert die Seite.
    2. Jedes Eingabefeld mindestens 1rem - darunter zoomt iOS Safari beim Fokus. */
 /* Alle Masse stehen in rem. Die Wurzelgroesse ist damit der eine Regler,
-   an dem "Grosse Schrift" dreht – Knoepfe, Abstaende und Felder wachsen mit,
+   an dem "Grosse Schrift" dreht, Knoepfe, Abstaende und Felder wachsen mit,
    nichts laeuft aus dem Raster. */
 html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 html[data-text="gross"]{font-size:18px}
 html[data-text="sehrgross"]{font-size:20px}
+
+/* ================= Umschaltbarer "Brutal"-Stil =================
+   Mehr -> Einstellungen -> Stil. Nur Optik, jederzeit auf Klassisch zurueck.
+   Kantiger, Versalien, dicke schwarze Linien - wie die Wuensche-/Umfrage-Seite. */
+html[data-skin="brutal"]{ --r:0.625rem; --r-sm:0.5rem; --r-lg:0.875rem; }
+/* dicke Kanten (Breite) auf allen Flaechen und Eingaben */
+html[data-skin="brutal"] .card,
+html[data-skin="brutal"] .item,
+html[data-skin="brutal"] .crow,
+html[data-skin="brutal"] .kpi,
+html[data-skin="brutal"] .alert,
+html[data-skin="brutal"] .banner,
+html[data-skin="brutal"] .seg,
+html[data-skin="brutal"] input[type=text],
+html[data-skin="brutal"] input[type=number],
+html[data-skin="brutal"] input[type=date],
+html[data-skin="brutal"] input[type=datetime-local],
+html[data-skin="brutal"] select,
+html[data-skin="brutal"] textarea,
+html[data-skin="brutal"] .qty,
+html[data-skin="brutal"] .step-btn,
+html[data-skin="brutal"] .pad button,
+html[data-skin="brutal"] .pad-quick button,
+html[data-skin="brutal"] .chip,
+html[data-skin="brutal"] .btn{ border-width:0.125rem; border-style:solid; }
+/* schwarze Kante auf den statischen Flaechen (Zustaende wie qty.set bleiben bunt) */
+html[data-skin="brutal"] .card,
+html[data-skin="brutal"] .item,
+html[data-skin="brutal"] .crow,
+html[data-skin="brutal"] .kpi,
+html[data-skin="brutal"] .alert,
+html[data-skin="brutal"] .banner,
+html[data-skin="brutal"] .seg,
+html[data-skin="brutal"] input[type=text],
+html[data-skin="brutal"] input[type=number],
+html[data-skin="brutal"] input[type=date],
+html[data-skin="brutal"] input[type=datetime-local],
+html[data-skin="brutal"] select,
+html[data-skin="brutal"] textarea,
+html[data-skin="brutal"] .chip,
+html[data-skin="brutal"] .btn{ border-color:var(--fg); }
+html[data-skin="brutal"] .sheet{ border-top:0.125rem solid var(--fg); }
+html[data-skin="brutal"] header.top{ border-bottom-width:0.125rem; border-bottom-color:var(--fg); }
+html[data-skin="brutal"] nav.tabs{ border-top-width:0.125rem; border-top-color:var(--fg); }
+html[data-skin="brutal"] .badge{ border:0.0625rem solid var(--fg); }
+/* Versalien + fett auf Beschriftungen und Knoepfen */
+html[data-skin="brutal"] .btn,
+html[data-skin="brutal"] .chip,
+html[data-skin="brutal"] .badge,
+html[data-skin="brutal"] .seg button,
+html[data-skin="brutal"] .section-title,
+html[data-skin="brutal"] .brand{ text-transform:uppercase; letter-spacing:.03em; }
+html[data-skin="brutal"] .btn,
+html[data-skin="brutal"] .seg button,
+html[data-skin="brutal"] .section-title,
+html[data-skin="brutal"] .brand{ font-weight:800; }
+html[data-skin="brutal"] label.fld>span{ text-transform:uppercase; font-weight:700; letter-spacing:.05em; }
+/* ================================================================ */
 button,input,select,textarea,label,a,.tab,.chip,.srow,.item,.alert,.tick,.buyrow,
 .pad button,.pad-quick button,.padfield{touch-action:manipulation}
 body{
@@ -249,18 +307,18 @@ body.counting{padding-bottom:0;overscroll-behavior:none}
   display:flex;flex-direction:column;align-items:center;
   height:100vh;height:100dvh;   /* dvh: ohne die Safari-Leiste mitzurechnen */
   padding:calc(0.5rem + env(safe-area-inset-top,0)) 1rem calc(0.5rem + var(--safe-b))}
-/* Auch am grossen Bildschirm bleibt die Runde telefonbreit – ein Zahlenblock
+/* Auch am grossen Bildschirm bleibt die Runde telefonbreit, ein Zahlenblock
    ueber 1000 Pixel ist niemandem eine Hilfe. */
 #roundZone.rz > *{width:100%;max-width:28.75rem}
 #roundZone .r-head{flex:none;padding-bottom:0.125rem}
-/* Der Mittelteil darf schrumpfen und scrollt im Notfall – die Knoepfe unten
+/* Der Mittelteil darf schrumpfen und scrollt im Notfall, die Knoepfe unten
    bleiben immer frei. Vorher lief er bei kleinen Displays unter sie. */
 #roundZone .r-body{flex:1;min-height:0;display:flex;flex-direction:column;
   overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 #roundZone .r-foot2{flex:none;padding-top:0.625rem}
 #roundZone .r-foot2 .round-nav{margin-top:0}
 
-/* Der Zahlenblock nimmt, was uebrig bleibt – auf grossen Telefonen werden
+/* Der Zahlenblock nimmt, was uebrig bleibt, auf grossen Telefonen werden
    die Tasten groesser, auf kleinen kleiner, aber nie unter Fingergroesse. */
 #roundZone .r-pad{flex:1;min-height:0;display:flex;flex-direction:column}
 #roundZone .r-pad > *{flex:none}
@@ -327,7 +385,7 @@ body.counting{padding-bottom:0;overscroll-behavior:none}
 .r-top button[disabled]{opacity:.3;pointer-events:none}
 .r-top button:first-child{font-size:1.5rem;line-height:0}
 
-/* Getraenk ohne Kartenrahmen – der Rahmen kostet auf dem Telefon nur Platz */
+/* Getraenk ohne Kartenrahmen, der Rahmen kostet auf dem Telefon nur Platz */
 .r-drink{flex:none;padding:0.125rem 0 0.75rem}
 .r-drink .round-name{font-size:1.75rem}
 
@@ -347,7 +405,7 @@ body.counting{padding-bottom:0;overscroll-behavior:none}
 .padtotal b{color:var(--fg);font-weight:640}
 
 /* Feste Mindesthoehe: der Hinweis erscheint beim ersten Tastendruck und darf
-   den Zahlenblock nicht nach unten schieben – sonst trifft der naechste
+   den Zahlenblock nicht nach unten schieben, sonst trifft der naechste
    schnelle Tipp die falsche Taste. */
 .padhint{margin-top:0.75rem;padding:0.5625rem 0.8125rem;border-radius:0.8125rem;background:var(--card-2);
   font-size:0.8438rem;color:var(--fg-dim);line-height:1.45;text-align:center;
@@ -399,7 +457,7 @@ body.counting{padding-bottom:0;overscroll-behavior:none}
   font-size:1.0625rem;display:grid;place-items:center}
 .buyrow .b-x:active{background:var(--card-2)}
 
-/* Menge direkt in der Zeile aendern – in Kaesten, wenn es welche gibt */
+/* Menge direkt in der Zeile aendern, in Kaesten, wenn es welche gibt */
 .buyrow .b-step{display:flex;align-items:center;gap:0.5625rem;margin-top:0.75rem}
 .buyrow .b-step button{height:2.875rem;border-radius:0.8125rem;border:0.0625rem solid var(--line-2);
   background:transparent;color:var(--fg);transition:background .14s ease}
@@ -446,7 +504,7 @@ body.counting{padding-bottom:0;overscroll-behavior:none}
 /* ---------- Tableiste ---------- */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;
   /* deckend + eigene Compositor-Ebene: bleibt beim Scrollen ruhig.
-     Kein backdrop-filter – der zwingt iOS-Safari zum Neuberechnen pro
+     Kein backdrop-filter, der zwingt iOS-Safari zum Neuberechnen pro
      Scroll-Frame und lässt die feste Leiste springen. */
   background:var(--bg);
   border-top:0.0625rem solid var(--line);padding-bottom:var(--safe-b);
@@ -591,7 +649,7 @@ hr.sep{border:none;border-top:0.0625rem solid var(--line);margin:1.125rem 0}
 .sw{display:flex;align-items:center;gap:0.875rem;min-height:3.25rem}
 .sw input{width:1.5rem;height:1.5rem;min-height:auto;accent-color:var(--fg);flex:none}
 
-/* Aufklappbarer Bereich fuer alles Technische – verschwindet aus dem Weg,
+/* Aufklappbarer Bereich fuer alles Technische, verschwindet aus dem Weg,
    solange es niemand braucht. */
 details.fold{border:0.0625rem solid var(--line);border-radius:var(--r);background:var(--card);
   margin-bottom:0.75rem;overflow:hidden;box-shadow:var(--shadow)}
@@ -623,7 +681,7 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
   .srow .s-name,.buyrow .b-name{font-size:1rem}
   .buyrow .b-step .b-pm{width:2.75rem}
 }
-/* Wunschliste im Overlay – öffnet in der App, damit man auch als installierte
+/* Wunschliste im Overlay, öffnet in der App, damit man auch als installierte
    PWA (ohne Safari-Leiste) immer wieder herauskommt. */
 .wish-overlay{position:fixed;inset:0;z-index:500;background:var(--bg);display:flex;flex-direction:column}
 .wish-ov-top{display:flex;align-items:center;gap:0.625rem;flex:none;
@@ -705,7 +763,7 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
     <div class="section-title">Etwas eingekauft?</div>
     <div class="card tight">
       <div class="small muted" style="margin-bottom:10px">Etwas mitgebracht, das nicht auf der Liste
-        stand? Hier direkt einbuchen – nur so bleibt der Verbrauch korrekt.</div>
+        stand? Hier direkt einbuchen, nur so bleibt der Verbrauch korrekt.</div>
       <button class="btn block" id="buyOpen">Einkauf eintragen</button>
     </div>
 
@@ -765,7 +823,7 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
         <button data-theme="dark" style="flex:1">Dunkel</button>
       </div>
       <div class="small faint" style="margin-top:8px">„Automatisch“ folgt der Einstellung des
-        Telefons – nachts dunkel, tagsüber hell.</div>
+        Telefons, nachts dunkel, tagsüber hell.</div>
       <hr class="sep">
       <label class="fld" style="margin-bottom:10px"><span>Schriftgröße</span></label>
       <div class="seg" id="cfgText" style="display:flex;width:100%">
@@ -773,7 +831,7 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
         <button data-text="gross" style="flex:1">Groß</button>
         <button data-text="sehrgross" style="flex:1">Sehr groß</button>
       </div>
-      <div class="small faint" style="margin-top:8px">Alles wächst mit – auch Knöpfe und Felder.</div>
+      <div class="small faint" style="margin-top:8px">Alles wächst mit, auch Knöpfe und Felder.</div>
       <hr class="sep">
       <label class="sw"><input type="checkbox" id="cfgPacks">
         <span>Mengen in Kästen anzeigen<br><span class="small faint">z.&nbsp;B. „1 Kasten + 2 Flaschen“
@@ -803,7 +861,7 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
     <div class="card">
       <label class="sw"><input type="checkbox" id="cfgCash">
         <span>Anzeigen, wie viel in der Kasse sein müsste<br><span class="small faint">Nach jeder
-        Zählung: Verbrauch&nbsp;× Preis. Nur eine Orientierung – Freigetränke, Bruch und Rabatte
+        Zählung: Verbrauch&nbsp;× Preis. Nur eine Orientierung, Freigetränke, Bruch und Rabatte
         sind nicht berücksichtigt. Beim Kassensturz zählst du nur das Bargeld; was zum Soll fehlt,
         wird als bargeldlos (PayPal/Karte) ausgewiesen, nicht als Fehlbetrag.</span></span>
       </label>
@@ -854,7 +912,7 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
     <div class="section-title">Sichern &amp; übertragen</div>
     <div class="card">
       <div class="small muted" style="margin-bottom:14px">Alles, was erfasst wurde, als Datei
-        herunterladen – zum Aufheben oder für Excel.</div>
+        herunterladen, zum Aufheben oder für Excel.</div>
       <div class="btn-grid">
         <button class="btn" id="expJson">Sicherung (JSON)</button>
         <button class="btn ghost" id="expCsv">Tabelle (CSV)</button>
@@ -894,10 +952,19 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
     <div id="dangerZone" class="hide">
       <div class="section-title">Verwaltung</div>
       <div class="card">
-        <div class="small muted" style="margin-bottom:14px">Welches Gerät hat wann was gemacht –
+        <div class="small muted" style="margin-bottom:14px">Welches Gerät hat wann was gemacht,
           Zählungen, Einkäufe, Änderungen, Zurücksetzen.</div>
         <button class="btn block" id="logOpen">Protokoll ansehen</button>
         <div class="tiny faint" style="margin-top:10px" id="thisDevice"></div>
+      </div>
+      <div class="section-title">Stil</div>
+      <div class="card">
+        <label class="fld" style="margin-bottom:10px"><span>Darstellung</span></label>
+        <div class="seg" id="cfgSkin" style="display:flex;width:100%">
+          <button data-skin="brutal" style="flex:1">Brutal</button>
+          <button data-skin="classic" style="flex:1">Klassisch</button>
+        </div>
+        <div class="small faint" style="margin-top:8px">„Brutal“: kantig, Versalien, dicke Linien, wie die Wunsch- und Umfrage-Seite. „Klassisch“: das weichere Design. Gilt nur für dieses Gerät, jederzeit umstellbar.</div>
       </div>
       <div class="section-title">Gefahrenzone</div>
       <div class="card">
@@ -952,12 +1019,12 @@ const FIREBASE_CONFIG = {
 const DEFAULT_BAR_ID = "staffelbar";
 
 /* Hausregel: 1 Kasten = 20 Flaschen. Gilt für jedes Getränk, bei dem nichts
-   anderes eingetragen ist – 22 gezählte Flaschen sind damit überall
+   anderes eingetragen ist, 22 gezählte Flaschen sind damit überall
    automatisch 1 Kasten + 2. Abweichungen (Cola-Kiste mit 12) stehen am
    Getränk selbst, und eine 0 dort heißt "gibt es nur einzeln". */
 const DEFAULT_PACK_SIZE = 20;
 
-const APP_VERSION = "2.0";
+const APP_VERSION = "2.1";
 const SDK = "https://www.gstatic.com/firebasejs/10.13.2/";
 
 /* ---------------------------------------------------------------------
@@ -979,7 +1046,7 @@ function parseNum(s){
 }
 /* Zahl deutsch formatieren, ganze Zahlen ohne Nachkomma */
 function fmt(n, max){
-  if (!Number.isFinite(n)) return "–";
+  if (!Number.isFinite(n)) return "·";
   const m = max === undefined ? 1 : max;
   return n.toLocaleString("de-DE", { maximumFractionDigits: m });
 }
@@ -1040,7 +1107,7 @@ function loadSettings(){
     locsOn: s.locsOn === undefined ? true : !!s.locsOn,
     locA: typeof s.locA === "string" && s.locA ? s.locA : "Tresen",
     locB: typeof s.locB === "string" && s.locB ? s.locB : "Lager",
-    /* Zuletzt bekannter Zugangscode als Hash – damit die Sperre auch offline
+    /* Zuletzt bekannter Zugangscode als Hash, damit die Sperre auch offline
        und vor dem ersten Firestore-Schnappschuss greift. */
     pinHash: typeof s.pinHash === "string" ? s.pinHash : "",
     pinLen: Math.max(0, Math.round(num(s.pinLen, 0))),
@@ -1069,7 +1136,7 @@ function saveSettings(){
    Was das leistet: Wer den QR-Code am Tresen scannt, sieht ohne Code nichts.
    Was das nicht leistet: echten Schutz. Die Seite liegt öffentlich, der
    geprüfte Hash steht darin, und vier Ziffern sind in Sekunden durchprobiert.
-   Die Daten selbst hängen ohnehin an offenen Firestore-Regeln – wer die
+   Die Daten selbst hängen ohnehin an offenen Firestore-Regeln, wer die
    Projekt-ID kennt, kommt an ihnen vorbei. Wer mehr braucht, siehe README.
    --------------------------------------------------------------------- */
 const LS_UNLOCK = "staffelbar.unlock.v1";
@@ -1090,7 +1157,7 @@ async function pinHash(pin){
 }
 
 /* Der Master-Code gibt das Ändern und Entfernen des Zugangscodes frei.
-   Er steht bewusst nur hier und lässt sich in der App nicht ändern –
+   Er steht bewusst nur hier und lässt sich in der App nicht ändern,
    wer ihn wechseln will, ändert diese eine Zeile und pusht.
 
    Erlaubt ist beides: der Code im Klartext ("1234") oder sein Hash.
@@ -1152,7 +1219,7 @@ function showLock(){
   document.body.style.overflow = "hidden";
 
   /* Ein frisches Gerät kennt noch keinen Hash und muss auf die Datenbank
-     warten. Kommt sie nicht, darf niemand ausgesperrt bleiben – dann steht
+     warten. Kommt sie nicht, darf niemand ausgesperrt bleiben, dann steht
      hier ein ehrlicher Hinweis samt Ausweg. */
   const wartet = !settings.pinHash && !(store.config && store.config.pinHash);
   $("#lockPad").classList.toggle("hide", wartet);
@@ -1163,11 +1230,11 @@ function showLock(){
   if (wartet){
     lockTimer = setTimeout(() => {
       if (!currentPinHash()){
-        lockSay("Keine Verbindung – der Code lässt sich gerade nicht prüfen.");
+        lockSay("Keine Verbindung, der Code lässt sich gerade nicht prüfen.");
         const foot = $("#lockFoot");
         if (foot) foot.innerHTML = '<button class="btn sm ghost" id="lockSkip">Ohne Code fortfahren</button>';
         const skip = $("#lockSkip");
-        if (skip) skip.onclick = () => { hideLock(); toast("Ohne Code – es werden nur lokale Daten gezeigt"); };
+        if (skip) skip.onclick = () => { hideLock(); toast("Ohne Code, es werden nur lokale Daten gezeigt"); };
       }
     }, 7000);
   }
@@ -1193,7 +1260,7 @@ function initLock(){
       if (lockBuf.length >= (len || 12)) return;
       lockBuf += b.dataset.d;
       drawLockDots(); lockSay("");
-      /* Ist die Länge bekannt, wird geprüft, sobald sie erreicht ist – und
+      /* Ist die Länge bekannt, wird geprüft, sobald sie erreicht ist, und
          bei Fehlschlag sofort geleert. Sonst sammelte ein Tippfehler
          weiter und jede folgende Eingabe wäre ebenfalls falsch. */
       if (len && lockBuf.length === len) await tryUnlock(true);
@@ -1225,7 +1292,7 @@ function applyBarSettings(){
   if (c.cashPrice != null && Number.isFinite(Number(c.cashPrice))) settings.cashPrice = Math.max(0, num(c.cashPrice, 1.5));
   saveSettings();
   /* Jetzt ist bekannt, ob und welcher Code gilt: aufsperren, wenn keiner
-     eingerichtet ist oder dieses Gerät schon frei ist – sonst zusperren. */
+     eingerichtet ist oder dieses Gerät schon frei ist, sonst zusperren. */
   if (isUnlocked()) hideLock(); else showLock();
 }
 async function saveBarSettings(){
@@ -1258,7 +1325,7 @@ async function saveBarSettings(){
 const LS_DEVICE = "staffelbar.device";
 
 /* Was der Browser über das Gerät verrät. Android nennt sein Modell
-   (z. B. "SM-G991B" oder "Pixel 8"), iPhones sagen nur "iPhone" – deshalb
+   (z. B. "SM-G991B" oder "Pixel 8"), iPhones sagen nur "iPhone", deshalb
    hängt immer eine kurze Kennung dran, damit zwei iPhones auseinander zu
    halten sind. */
 function deviceMeta(){
@@ -1302,7 +1369,7 @@ function deviceName(){
   return m.model + " · " + d.id.slice(0, 4);
 }
 
-/* Öffentliche IP – nur ein Anhaltspunkt: alle Handys im selben WLAN
+/* Öffentliche IP, nur ein Anhaltspunkt: alle Handys im selben WLAN
    melden dieselbe. Kommt von einem Echo-Dienst, darf fehlen. */
 let deviceIp = "";
 async function fetchDeviceIp(){
@@ -1315,7 +1382,7 @@ async function fetchDeviceIp(){
     if (j && typeof j.ip === "string") deviceIp = j.ip;
   } catch(_){}
 }
-/* Auf Android/Chrome gibt es das genaue Modell auf Nachfrage – nachladen
+/* Auf Android/Chrome gibt es das genaue Modell auf Nachfrage, nachladen
    und merken, dann stimmt der Name ab dem zweiten Öffnen. */
 async function refineDeviceModel(){
   try {
@@ -1332,7 +1399,7 @@ function byStamp(){
 }
 
 /* Eintrag ins Protokoll. Schlägt das Schreiben fehl, bleibt die eigentliche
-   Aktion trotzdem gültig – das Protokoll darf nichts blockieren. */
+   Aktion trotzdem gültig, das Protokoll darf nichts blockieren. */
 async function logActivity(action, detail){
   const d = deviceInfo(), m = deviceMeta();
   try {
@@ -1346,7 +1413,7 @@ async function logActivity(action, detail){
    3d) Barcode-Scanner (EAN-13 / EAN-8), ohne fremde Bibliothek
 
    Wo der Browser einen eingebauten Erkenner hat (Chrome/Android:
-   BarcodeDetector), wird der genommen – er ist robuster. Sonst liest der
+   BarcodeDetector), wird der genommen, er ist robuster. Sonst liest der
    Code hier selbst: Aus dem Kamerabild werden waagerechte Linien
    genommen, in hell/dunkel zerlegt und die Strichbreiten mit den
    EAN-Mustern verglichen.
@@ -1382,7 +1449,7 @@ function eanChecksumOk(digits){
   }
   return (10 - (sum % 10)) % 10 === digits[n - 1];
 }
-/* runs: [{dark, w}] – versucht an jeder plausiblen Startstelle zu lesen */
+/* runs: [{dark, w}], versucht an jeder plausiblen Startstelle zu lesen */
 function eanFromRuns(runs){
   const tryAt = (i, n) => {                      // n = 13 oder 8 Ziffern
     const left = n === 13 ? 6 : 4, right = left;
@@ -1438,7 +1505,7 @@ function lineRuns(gray, width){
     acc += gray[x]; if (x >= win) acc -= gray[x - win];
     mean[x] = acc / Math.min(x + 1, win);
   }
-  /* mean laeuft nach – zentrieren, indem wir um win/2 versetzt lesen */
+  /* mean laeuft nach, zentrieren, indem wir um win/2 versetzt lesen */
   const runs = []; let cur = null;
   for (let x = 0; x < width; x++){
     const mx = mean[Math.min(width - 1, x + (win >> 1))];
@@ -1521,7 +1588,7 @@ async function scanSheet(onCode, opts){
   });
 
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-    msg.textContent = "Dieser Browser kann die Kamera nicht öffnen – bitte den Code von Hand eingeben.";
+    msg.textContent = "Dieser Browser kann die Kamera nicht öffnen, bitte den Code von Hand eingeben.";
     return;
   }
   try {
@@ -1529,7 +1596,7 @@ async function scanSheet(onCode, opts){
       video: {
         facingMode: { ideal: "environment" },
         width: { ideal: 1920 }, height: { ideal: 1080 },
-        // Nicht-Standard, wird ignoriert wo unbekannt – hilft aber auf vielen
+        // Nicht-Standard, wird ignoriert wo unbekannt, hilft aber auf vielen
         // Android-Geräten, den Fokus gar nicht erst umherwandern zu lassen.
         focusMode: "continuous", advanced: [{ focusMode: "continuous" }]
       }, audio: false });
@@ -1537,12 +1604,12 @@ async function scanSheet(onCode, opts){
     await video.play();
   } catch(err){
     msg.textContent = "Kein Zugriff auf die Kamera (" + (err && err.name ? err.name : "abgelehnt") + "). " +
-      "In den Browser-Einstellungen erlauben – oder den Code von Hand eingeben.";
+      "In den Browser-Einstellungen erlauben, oder den Code von Hand eingeben.";
     return;
   }
   msg.textContent = "Strichcode in den Rahmen halten";
 
-  /* Kamera scharf und ruhig stellen – das ist der häufigste Grund, warum ein
+  /* Kamera scharf und ruhig stellen, das ist der häufigste Grund, warum ein
      Code erst nach Sekunden sitzt: Fokus wandert oder es ist zu dunkel. */
   const track = scanStream.getVideoTracks()[0];
   const caps = (track && track.getCapabilities) ? (track.getCapabilities() || {}) : {};
@@ -1583,7 +1650,7 @@ async function scanSheet(onCode, opts){
 
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  /* Bildsynchron lesen, sobald ein neues Kamerabild da ist – statt starr alle
+  /* Bildsynchron lesen, sobald ein neues Kamerabild da ist, statt starr alle
      150 ms. Sitzt der Code scharf im Bild, wird er im nächsten Frame erkannt. */
   const rVFC = typeof video.requestVideoFrameCallback === "function";
   let last = "", hits = 0, busy = false;
@@ -1601,7 +1668,7 @@ async function scanSheet(onCode, opts){
         const found = await detector.detect(video);
         if (found && found.length) code = found[0].rawValue;
       } else if (video.videoWidth){
-        /* mittleren Streifen scharf abtasten – da liegt der Rahmen */
+        /* mittleren Streifen scharf abtasten, da liegt der Rahmen */
         const w = Math.min(1280, video.videoWidth), scale = w / video.videoWidth;
         const h = Math.round(video.videoHeight * scale);
         canvas.width = w; canvas.height = h;
@@ -1611,7 +1678,7 @@ async function scanSheet(onCode, opts){
       if (code){
         if (code === last) hits++; else { last = code; hits = 1; }
         msg.textContent = "Gelesen: " + code;
-        /* Der eingebaute Erkenner ist zuverlässig – gleich übernehmen. Der
+        /* Der eingebaute Erkenner ist zuverlässig, gleich übernehmen. Der
            eigene Leser braucht zwei gleiche Treffer gegen Fehllesungen. */
         if (hits >= 2 || detector){ if (navigator.vibrate) { try { navigator.vibrate(40); } catch(_){} } finish(code); return; }
       }
@@ -1622,7 +1689,7 @@ async function scanSheet(onCode, opts){
   again();
 }
 
-/* Produktname zu einem Code aus Open Food Facts – frei, ohne Schlüssel,
+/* Produktname zu einem Code aus Open Food Facts, frei, ohne Schlüssel,
    Getränke sind dort gut abgedeckt. Wird nur für unbekannte Codes gefragt,
    also einmal je neuer Sorte. Darf fehlen; dann tippt man den Namen. */
 async function lookupEan(code){
@@ -1647,7 +1714,7 @@ async function lookupEan(code){
 
     /* Marke davor, wenn sie nicht schon im Namen steckt; Menge dahinter.
        Manche Einträge führen als Marke den Firmennamen ("COCA-COLA SERVICES
-       SA/NV") – solche Ungetüme bleiben weg, geprüft wird am ersten Wort. */
+       SA/NV"), solche Ungetüme bleiben weg, geprüft wird am ersten Wort. */
     let voll = name;
     const erstes = brand.split(/[\s-]/)[0].toLowerCase();
     const markeOk = brand && brand.length <= 24 && !/\b(gmbh|ag|sa|nv|ltd|inc|co\.|kg|ohg)\b/i.test(brand);
@@ -1680,7 +1747,7 @@ function assignCodeSheet(code, onDrink){
   let treffer = null;
   sheet(
     '<h3>Code noch unbekannt</h3>' +
-    '<div class="small muted" style="margin-top:5px">' + esc(code) + ' – zu welchem Getränk gehört er? ' +
+    '<div class="small muted" style="margin-top:5px">' + esc(code) + ', zu welchem Getränk gehört er? ' +
       'Einmal antippen, danach erkennt die App ihn von selbst.</div>' +
     '<div class="banner" id="aLookup" style="margin-top:14px"><div>Suche den Namen in der Produktdatenbank…</div></div>' +
     '<div style="max-height:40vh;overflow-y:auto">' +
@@ -1704,10 +1771,10 @@ function assignCodeSheet(code, onDrink){
         if (res){
           box.innerHTML = '<div>Gefunden: <b>' + esc(res.name) + '</b>' +
             (res.category ? ' <span class="badge">' + esc(res.category) + '</span>' : '') +
-            '<br><span class="faint">„Neues Getränk“ übernimmt den Namen – du kannst ihn noch ändern.</span></div>';
+            '<br><span class="faint">„Neues Getränk“ übernimmt den Namen, du kannst ihn noch ändern.</span></div>';
           $("#aNew", el).textContent = "„" + res.name + "“ als neues Getränk anlegen";
         } else {
-          box.innerHTML = '<div>In der Produktdatenbank nicht gefunden – der Name muss von Hand eingetragen werden.</div>';
+          box.innerHTML = '<div>In der Produktdatenbank nicht gefunden, der Name muss von Hand eingetragen werden.</div>';
         }
       });
       el.addEventListener("click", async e => {
@@ -1724,7 +1791,7 @@ function assignCodeSheet(code, onDrink){
 
 /* ---------------------------------------------------------------------
    3e) Als App installieren
-   Android/Chrome meldet sich mit beforeinstallprompt – dann gibt es einen
+   Android/Chrome meldet sich mit beforeinstallprompt, dann gibt es einen
    echten Knopf. iPhone kennt keinen Knopf; da bleibt nur der Weg über das
    Teilen-Menü, und den schreiben wir hin.
    --------------------------------------------------------------------- */
@@ -1772,7 +1839,7 @@ function renderInstall(){
       ? '<div class="tiny faint" style="margin-top:10px">Am einfachsten klappt das mit Chrome.</div>' : '');
 }
 
-/* Helligkeit: Wahl des Geräts, nicht der Bar – deshalb nur lokal. */
+/* Helligkeit: Wahl des Geräts, nicht der Bar, deshalb nur lokal. */
 function currentTheme(){
   try { const t = localStorage.getItem(LS_THEME); return (t === "light" || t === "dark") ? t : "auto"; }
   catch(_){ return "auto"; }
@@ -1782,7 +1849,7 @@ function applyTheme(mode){
   try { m === "auto" ? localStorage.removeItem(LS_THEME) : localStorage.setItem(LS_THEME, m); } catch(_){}
   if (m === "auto") delete document.documentElement.dataset.theme;
   else document.documentElement.dataset.theme = m;
-  /* Die Leiste oben am Telefon mitfärben – die Medienabfrage im Kopf greift
+  /* Die Leiste oben am Telefon mitfärben, die Medienabfrage im Kopf greift
      nicht mehr, sobald die Helligkeit erzwungen ist. */
   const dunkel = m === "dark" ||
     (m === "auto" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
@@ -1807,6 +1874,21 @@ function applyText(mode){
   if (view === "stats") renderStats();      // Diagramme messen ihre Breite neu
 }
 
+/* Stil: "brutal" (Standard, kantig) oder "classic" (das weichere Design).
+   Reine Optik pro Gerät, jederzeit umstellbar. */
+const LS_SKIN = "staffelbar.skin";
+function currentSkin(){
+  try { return localStorage.getItem(LS_SKIN) === "classic" ? "classic" : "brutal"; }
+  catch(_){ return "brutal"; }
+}
+function applySkin(mode){
+  const m = mode === "classic" ? "classic" : "brutal";
+  try { m === "brutal" ? localStorage.removeItem(LS_SKIN) : localStorage.setItem(LS_SKIN, "classic"); } catch(_){}
+  if (m === "brutal") document.documentElement.dataset.skin = "brutal";
+  else delete document.documentElement.dataset.skin;
+  if (view === "stats") renderStats();
+}
+
 function activeFbConfig(){
   const c = (settings.fb && settings.fb.projectId) ? settings.fb : FIREBASE_CONFIG;
   return (c && c.apiKey && c.projectId) ? c : null;
@@ -1816,7 +1898,7 @@ function activeFbConfig(){
    4) Datenspeicher: Firestore, sonst lokaler Fallback
 
    Eine Regel für alles: **qty ist immer die Einzeleinheit** (Flasche, Dose, …).
-   Kästen sind reine Ein- und Ausgabe – sie werden beim Erfassen in Einzel-
+   Kästen sind reine Ein- und Ausgabe, sie werden beim Erfassen in Einzel-
    einheiten umgerechnet und nie als eigene Größe gespeichert. Dadurch bleiben
    Verbrauch, Ø-Werte und Vorhersage über alle Getränke hinweg vergleichbar,
    auch wenn sich die Kastengröße später ändert.
@@ -1837,7 +1919,7 @@ function activeFbConfig(){
                  kind "item" = selbst auf die Liste gesetzt
                  kind "skip" = Vorschlag bis zur nächsten Zählung ausgeblendet
      settings/thresholds { warnDays, minPacks, at }
-                 Warnschwellen. Sie gehören der Bar, nicht dem Telefon –
+                 Warnschwellen. Sie gehören der Bar, nicht dem Telefon,
                  sonst sähe jedes Gerät eine andere Erinnerung.
      empties   { at, crates, bottles, session, by }
                  Leergut: leere Kästen und lose leere Flaschen, jeweils
@@ -1846,7 +1928,7 @@ function activeFbConfig(){
                  Protokoll: welches Gerät hat was gemacht. Zählungen und
                  Einkäufe tragen zusätzlich by: { id, name }.
 
-   Zählungen werden nie überschrieben – jede Zählung ist ein neues Dokument.
+   Zählungen werden nie überschrieben, jede Zählung ist ein neues Dokument.
    --------------------------------------------------------------------- */
 const store = {
   mode: "local",          // "firebase" | "local"
@@ -1873,7 +1955,7 @@ const store = {
     try {
       /* Ohne Netz bleibt der Import sonst offen und die Anzeige haengt */
       const withTimeout = p => Promise.race([p, new Promise((_, rej) =>
-        setTimeout(() => rej(new Error("Zeitüberschreitung – Firebase-SDK nicht erreichbar (keine Internetverbindung?)")), 15000))]);
+        setTimeout(() => rej(new Error("Zeitüberschreitung, Firebase-SDK nicht erreichbar (keine Internetverbindung?)")), 15000))]);
       const [appMod, fsMod] = await withTimeout(Promise.all([
         import(SDK + "firebase-app.js"),
         import(SDK + "firebase-firestore.js")
@@ -1895,7 +1977,7 @@ const store = {
       this.mode = "local"; this.status = "error";
       const raw = (err && err.message) ? err.message : String(err);
       this.error = /dynamically imported module|Failed to fetch|NetworkError/i.test(raw)
-        ? "Das Firebase-SDK konnte nicht geladen werden – keine Internetverbindung oder blockiert."
+        ? "Das Firebase-SDK konnte nicht geladen werden, keine Internetverbindung oder blockiert."
         : raw;
       this._loadLocal(); this.emit();
     }
@@ -1993,7 +2075,7 @@ const store = {
     if (row) Object.assign(row, data);
     this._sortLocal(); this._saveLocal(); this.emit();
   },
-  /* Viele Dokumente auf einmal entfernen – beim Zurücksetzen wären einzelne
+  /* Viele Dokumente auf einmal entfernen, beim Zurücksetzen wären einzelne
      Aufrufe unnötig langsam. */
   async removeMany(coll, ids){
     if (!ids.length) return;
@@ -2040,7 +2122,7 @@ const store = {
         drinks: this.drinks, counts: this.counts, purchases: this.purchases, shopping: this.shopping,
         activity: this.activity.slice(0, 400), empties: this.empties, cashups: this.cashups
       }));
-    } catch(e){ toast("Speicher voll – Export anlegen!"); }
+    } catch(e){ toast("Speicher voll, Export anlegen!"); }
   },
   _sortLocal(){
     this.drinks.sort((a,b) => String(a.name||"").localeCompare(String(b.name||""), "de"));
@@ -2116,7 +2198,7 @@ function analyze(drinkId){
   /* --- Darf hochgerechnet werden? --- */
   if (usable.length < FC_MIN_SEGMENTS){
     res.reason = counts.length < 2
-      ? "Erst einmal gezählt – für eine Schätzung braucht es drei Zählungen"
+      ? "Erst einmal gezählt, für eine Schätzung braucht es drei Zählungen"
       : "Noch zu wenige Zählungen für eine Schätzung";
     return res;
   }
@@ -2164,7 +2246,7 @@ function invalidateAnalysis(){ _analysisCache = null; }
 /* Nachkauf-Erinnerung: was geht zur Neige?
    Reihenfolge: erst kritisch, dann Warnung; innerhalb der Gruppe nach
    Reichweite. Posten ohne Vorhersage, die den Mindestbestand unterschreiten,
-   stehen vor den hochgerechneten – der Unterschreitung liegt eine Zählung
+   stehen vor den hochgerechneten, der Unterschreitung liegt eine Zählung
    zugrunde, keine Schätzung. */
 /* Ab wann gilt ein Getränk als knapp, gemessen an der Menge?
    Ein eigener Mindestbestand am Getränk schlägt die Hausregel; sonst greift
@@ -2198,7 +2280,7 @@ function alerts(){
     if (a.ok) sub.push(fmt(a.perDay, 1) + " pro Tag");
     else if (a.lastCount) sub.push("noch keine Schätzung");
 
-    /* Große Zahl rechts: Reichweite, wo es eine gibt – sonst die Menge, und
+    /* Große Zahl rechts: Reichweite, wo es eine gibt, sonst die Menge, und
        die in Kästen, sobald mindestens einer voll ist. */
     let big, bigLabel;
     if (empty){ big = "0"; bigLabel = "leer"; }
@@ -2217,7 +2299,7 @@ function alerts(){
       a,
       level: crit ? "crit" : "warn",
       rank: crit ? 0 : 1,
-      /* ohne Hochrechnung gibt es keine Reichweite – solche Posten werden
+      /* ohne Hochrechnung gibt es keine Reichweite, solche Posten werden
          über ihren Füllgrad einsortiert und landen vor den geschätzten */
       sort: empty ? -1000 : (a.ok ? a.daysLeft : -1 + (floor.qty > 0 ? a.stock/floor.qty : 0)),
       big: big, bigLabel: bigLabel,
@@ -2227,7 +2309,7 @@ function alerts(){
   return out.sort((x, y) => (x.rank - y.rank) || (x.sort - y.sort));
 }
 
-/* Vorschlag, wie viel nachzukaufen ist – in Einzeleinheiten, aber auf volle
+/* Vorschlag, wie viel nachzukaufen ist, in Einzeleinheiten, aber auf volle
    Kästen aufgerundet, weil im Getränkemarkt ganze Kästen gekauft werden.
    Zielbestand ist der Verbrauch der dreifachen Warnfrist; ohne belastbaren
    Ø-Wert ersatzweise der doppelte Mindestbestand. */
@@ -2248,7 +2330,7 @@ function suggestBuy(a){
 
    packSize = wie viele Flaschen in einen Kasten gehen (20). 0 oder 1 heißt:
    dieses Getränk gibt es nur einzeln. Gespeichert wird
-   immer nur die Gesamtzahl der Einzeleinheiten – die Aufteilung in Kästen
+   immer nur die Gesamtzahl der Einzeleinheiten, die Aufteilung in Kästen
    entsteht erst bei der Anzeige und lässt sich jederzeit umstellen.
    --------------------------------------------------------------------- */
 
@@ -2332,14 +2414,14 @@ function consumptionInRange(days, category){
 
 /* Verbrauch aller Getränke, gebündelt nach dem Zeitpunkt der Zählung, die
    den Abschnitt abgeschlossen hat. Damit lässt sich sehen, wie viel zwischen
-   zwei Zählungen insgesamt weggetrunken wurde – nicht nur pro Sorte. */
+   zwei Zählungen insgesamt weggetrunken wurde, nicht nur pro Sorte. */
 function consumptionBySession(days, category){
   const since = days ? Date.now() - days*DAY : 0;
   const map = {};
   analysisAll().forEach(a => {
     if (!a.drink || (category && a.drink.category !== category)) return;
     a.segments.forEach(seg => {
-      /* Auch sehr kurze Abschnitte zählen zur Summe – wer um 10 und um 11 Uhr
+      /* Auch sehr kurze Abschnitte zählen zur Summe, wer um 10 und um 11 Uhr
          zählt und 60 Flaschen weniger findet, hat 60 Flaschen weniger. Für
          Tagesschnitte bleiben sie draußen (siehe aggregateConsumption). */
       if (seg.anomaly) return;
@@ -2356,7 +2438,7 @@ function consumptionBySession(days, category){
 }
 
 /* Summe und Tagesschnitt über alle Sorten. Der Nenner ist der tatsächlich
-   abgedeckte Zeitraum, nicht der gewählte Filter – sonst sähe ein Tag
+   abgedeckte Zeitraum, nicht der gewählte Filter, sonst sähe ein Tag
    Zählungen im 30-Tage-Fenster nach einem Dreißigstel aus. */
 function aggregateConsumption(days, category){
   const rows = consumptionBySession(days, category);
@@ -2368,12 +2450,12 @@ function aggregateConsumption(days, category){
     spanDays = Math.max(0, (new Date(to).getTime() - new Date(from).getTime()) / DAY);
   }
   /* Tagesschnitt erst ab derselben Spanne, die auch für die Vorhersage
-     verlangt wird – aus einem Abend lässt sich keine Woche hochrechnen. */
+     verlangt wird, aus einem Abend lässt sich keine Woche hochrechnen. */
   return { rows, total, spanDays, perDay: spanDays >= FC_MIN_SPAN_DAYS ? total / spanDays : null };
 }
 
 /* Kassen-Soll: was der Verbrauch bei einheitlichem Preis eingebracht haben
-   müsste. Nur eine Orientierung – Freigetränke, Bruch und Rabatte kennt die
+   müsste. Nur eine Orientierung, Freigetränke, Bruch und Rabatte kennt die
    App nicht. */
 function eur(n){
   return (Math.round(num(n) * 100) / 100).toLocaleString("de-DE",
@@ -2449,7 +2531,7 @@ function cashupSheet(o){
     '<h3>Kassensturz</h3>' +
     '<div class="small muted" style="margin-top:4px">Soll seit der letzten Zählung: <b>' + esc(eur(soll)) +
       '</b><br>' + fmt(bottles) + ' verbraucht × ' + esc(eur(settings.cashPrice)) + ' je Getränk</div>' +
-    '<div class="small faint" style="margin-top:6px">Nur das <b>Bargeld</b> zählen. Was zum Soll fehlt, gilt als bargeldlos (PayPal/Karte) – kein Fehlbetrag.</div>' +
+    '<div class="small faint" style="margin-top:6px">Nur das <b>Bargeld</b> zählen. Was zum Soll fehlt, gilt als bargeldlos (PayPal/Karte), kein Fehlbetrag.</div>' +
     '<div class="section-title" style="margin-top:14px">Wie viel Bargeld ist in der Kasse?</div>' +
     '<div class="eurodisp"><span id="euroVal">0</span> €</div>' +
     '<div class="eurodiff" id="euroDiff"></div>' +
@@ -2496,7 +2578,7 @@ function cashupSheet(o){
 
 /* ---- Lagerorte ----
    Die Auswertung rechnet immer mit der Gesamtmenge. Die Aufteilung auf
-   Orte ist Eingabe und Anzeige – wie die Kästen. */
+   Orte ist Eingabe und Anzeige, wie die Kästen. */
 function locNames(){ return settings.locsOn ? [settings.locA, settings.locB] : []; }
 function lastParts(drinkId){
   const a = analyze(drinkId), lc = a.lastCount;
@@ -2538,11 +2620,11 @@ async function saveEmpties(crates, bottles, session){
                                session: session || "", by: byStamp() });
   logActivity("Leergut gezählt", emptiesText({ crates, bottles }));
 }
-/* Pad-Dialog fürs Leergut: Kästen und Flaschen bleiben getrennt –
+/* Pad-Dialog fürs Leergut: Kästen und Flaschen bleiben getrennt,
    25 lose Flaschen sind kein Kasten. */
 function emptiesSheet(preset, onOk){
   qtySheet({
-    title: "Leergut", sub: "Leere Kästen und lose leere Flaschen – das geht zum Getränkemarkt mit.",
+    title: "Leergut", sub: "Leere Kästen und lose leere Flaschen, das geht zum Getränkemarkt mit.",
     drink: { name: "Leergut", unit: "Flaschen", packSize: DEFAULT_PACK_SIZE, packName: "Kasten" },
     parts: true, okLabel: "Übernehmen",
     value: preset ? { packs: num(preset.crates, 0), singles: num(preset.bottles, 0) } : "",
@@ -2565,7 +2647,7 @@ function sessionList(){
 
 /* Was stand in dieser Zählung, und was folgt daraus? Wird nicht aus der
    laufenden Auswertung gelesen, sondern für den Zeitpunkt der Zählung neu
-   gerechnet – sonst wäre "danach" schon mit eingerechnet. */
+   gerechnet, sonst wäre "danach" schon mit eingerechnet. */
 function sessionDetail(sess){
   return sess.rows.map(c => {
     const d = drinkById(c.drinkId);
@@ -2673,18 +2755,18 @@ function padState(d, baseQty){
 }
 function padValue(d, st){ return toBase(parseNum(st.packs || 0), parseNum(st.singles || 0), d); }
 
-/* Was bedeutet die gerade eingetippte Zahl? Direkt beim Tippen sichtbar –
+/* Was bedeutet die gerade eingetippte Zahl? Direkt beim Tippen sichtbar,
    dadurch fällt ein Vertipper auf, solange er noch zu ändern ist. */
 const PAD_HINT_EMPTY = '<div class="padhint pad-empty"></div>';
 /* Der Kasten ist ein Flex-Container (für die feste Höhe), deshalb muss der
-   Text in einem eigenen Element stecken – sonst verschluckt Flex die
+   Text in einem eigenen Element stecken, sonst verschluckt Flex die
    Leerzeichen rund um die fett gesetzte Menge. */
 function padHint(cls, html){
   return '<div class="padhint' + (cls ? " " + cls : "") + '"><span>' + html + '</span></div>';
 }
 function padHintHtml(d, st){
   if (st.parts) return PAD_HINT_EMPTY;
-  /* Solange nichts eingetippt ist, steht hier der Merksatz zum Kasten –
+  /* Solange nichts eingetippt ist, steht hier der Merksatz zum Kasten,
      so bleibt der reservierte Platz gefüllt statt als Loch dazustehen. */
   if (!st.touched) return packSize(d) ? padHint("", esc(packHint(d))) : PAD_HINT_EMPTY;
   const v = padValue(d, st);
@@ -2695,12 +2777,12 @@ function padHintHtml(d, st){
   const a = st.ana;
   if (!a) return PAD_HINT_EMPTY;
   if (!a.lastCount)
-    return padHint("", 'Erste Zählung – Verbrauch lässt sich erst ab der zweiten berechnen.');
+    return padHint("", 'Erste Zählung, Verbrauch lässt sich erst ab der zweiten berechnen.');
 
   const before = num(a.stock);
   const diff = Math.round((before - v) * 100) / 100;
   if (diff < -0.0001)
-    return padHint("warn", 'Der Bestand wäre um <b>' + fmt(-diff) + '</b> gestiegen – fehlt ein Einkauf?');
+    return padHint("warn", 'Der Bestand wäre um <b>' + fmt(-diff) + '</b> gestiegen, fehlt ein Einkauf?');
 
   const days = num(a.daysSinceCount, 0);
   let t = 'das wären <b>' + esc(qtyUnit(diff, unitOf(d))) + '</b> verbraucht';
@@ -2709,7 +2791,7 @@ function padHintHtml(d, st){
     t += " in " + fmt(days, 1) + " Tagen, " + fmt(perDay, 1) + " pro Tag";
     /* Auffällig weit über dem bisherigen Schnitt? Dann lieber nachfragen. */
     if (a.ok && a.perDay > 0 && perDay / a.perDay >= 3)
-      return padHint("warn", '<b>' + esc(qtyUnit(diff, unitOf(d))) + '</b> verbraucht – rund ' +
+      return padHint("warn", '<b>' + esc(qtyUnit(diff, unitOf(d))) + '</b> verbraucht, rund ' +
         fmt(perDay / a.perDay, 1) + '-mal so viel wie sonst. Vertippt?');
   }
   return padHint("", t);
@@ -2761,7 +2843,7 @@ function padHtml(d, st){
 }
 
 /* 22 eingetippte Flaschen als 1 Kasten + 2 zurückschreiben. Passiert erst
-   beim Feldwechsel – während des Tippens würde die Zahl sonst wegspringen. */
+   beim Feldwechsel, während des Tippens würde die Zahl sonst wegspringen. */
 function padNormalize(d, st){
   if (!st.touched || !packSize(d) || st.parts) return;
   const sp = splitPack(padValue(d, st), d);
@@ -2796,7 +2878,7 @@ function padClick(e, d, st){
   return false;
 }
 
-/* Menge in einem Sheet erfassen – ohne zweites Modal darüber */
+/* Menge in einem Sheet erfassen, ohne zweites Modal darüber */
 function qtySheet(opts){
   const d = opts.drink;
   /* Mit Lagerorten: ein Zustand je Ort, oben ein Umschalter. Ohne: einer. */
@@ -2857,13 +2939,13 @@ function qtySheet(opts){
 }
 
 /* ---------------------------------------------------------------------
-   7) Zählen – geführte Runde und Einzelzählung
+   7) Zählen, geführte Runde und Einzelzählung
 
    Beides schreibt in denselben Zwischenspeicher `pending`; gespeichert
    wird einmal, als eine Zählung mit gemeinsamer session-Kennung.
    --------------------------------------------------------------------- */
 const pending = new Map();      // drinkId -> Gesamtmenge in Einzeleinheiten (noch nicht gespeichert)
-/* Bei zwei Lagerorten: drinkId -> { Tresen: 12, Lager: 40 } – nur die
+/* Bei zwei Lagerorten: drinkId -> { Tresen: 12, Lager: 40 }, nur die
    wirklich gezählten Orte. Die Gesamtmenge in `pending` ist deren Summe plus
    dem, was vom letzten Mal übernommen wird. */
 const pendingParts = new Map();
@@ -2874,7 +2956,7 @@ const round = { active:false, order:[], locs:[], steps:[], idx:0, cat:"", overvi
 
 function hasPending(){ return pending.size > 0; }
 
-/* Menge für ein Getränk setzen – mit Ort (bei Lagerorten) oder ohne */
+/* Menge für ein Getränk setzen, mit Ort (bei Lagerorten) oder ohne */
 function setPending(id, qty, loc){
   if (!loc){ pending.set(id, qty); pendingParts.delete(id); return; }
   const parts = Object.assign({}, pendingParts.get(id) || {});
@@ -2922,13 +3004,13 @@ async function undoSession(session){
   try {
     for (const c of rows) await store.remove("counts", c.id);
     logActivity("Zählung zurückgenommen", rows.length + " Eintrag/Einträge vom " + fmtDateTime(rows[0].at));
-    toast("Zurückgenommen – die Mengen stehen wieder zum Korrigieren bereit");
+    toast("Zurückgenommen, die Mengen stehen wieder zum Korrigieren bereit");
   } catch(err){ console.error(err); toast("Fehler beim Zurücknehmen"); }
   renderAll();
 }
 
 /* Angefangene Runde übersteht das Schließen der Seite.
-   Am Tresen wird das Telefon zwischendurch weggelegt – ohne das wäre die
+   Am Tresen wird das Telefon zwischendurch weggelegt, ohne das wäre die
    halbe Runde weg. */
 const LS_ROUND = "staffelbar.round.v1";
 function persistRound(){
@@ -2981,7 +3063,7 @@ function roundOrder(cat){
 function roundLabel(cat){
   return cat === ROUND_DUE ? "Nur was knapp wird" : (cat || "Alle Getränke");
 }
-/* Schritte der Runde: erst alle Getränke am ersten Ort, dann am zweiten –
+/* Schritte der Runde: erst alle Getränke am ersten Ort, dann am zweiten,
    so läuft man wirklich: einmal den Kühlschrank durch, dann ins Lager. */
 function buildSteps(){
   const locs = round.locs.length ? round.locs : [""];
@@ -3024,7 +3106,7 @@ function roundState(){
     round.st.last = step.loc
       ? (lp && lp[step.loc] != null ? num(lp[step.loc]) : null)
       : (a.lastCount ? num(a.lastCount.qty) : null);
-    /* Plausibilität nur bei Gesamtmengen – ein Ort allein sagt nichts über den Verbrauch */
+    /* Plausibilität nur bei Gesamtmengen, ein Ort allein sagt nichts über den Verbrauch */
     round.st.ana = step.loc ? null : a;
     round.stFor = key;
   }
@@ -3062,7 +3144,7 @@ function renderRound(){
   zone.classList.add("rz");
   document.body.classList.add("counting");
 
-  /* Beim Start sind die Getränke noch nicht geladen – eine wiederhergestellte
+  /* Beim Start sind die Getränke noch nicht geladen, eine wiederhergestellte
      Runde darf daran nicht scheitern. */
   if (!store.drinks.length){
     zone.innerHTML = '<div class="empty">Getränke werden geladen…</div>';
@@ -3092,7 +3174,7 @@ function renderRound(){
       '<button data-act="abort" aria-label="Abbrechen">&#10005;</button>' +
     '</div></div>';
 
-  /* --- Übersicht: was ist erledigt, was fehlt – bei Orten gruppiert --- */
+  /* --- Übersicht: was ist erledigt, was fehlt, bei Orten gruppiert --- */
   if (round.overview){
     let html = "", lastLoc = null;
     round.steps.forEach((step, i) => {
@@ -3136,10 +3218,10 @@ function renderRound(){
       });
       if (uebernommen.length)
         hinweis += '<div class="banner"><div><b>Vom letzten Mal übernommen:</b> ' + esc(uebernommen.join(", ")) +
-          ' – dort wurde diesmal nicht gezählt, der alte Stand zählt mit.</div></div>';
+          ', dort wurde diesmal nicht gezählt, der alte Stand zählt mit.</div></div>';
       if (ohne.length)
         hinweis += '<div class="banner"><div><b>Nie gezählt:</b> ' + esc(ohne.join(", ")) +
-          ' – dieser Ort fehlt in der Summe.</div></div>';
+          ', dieser Ort fehlt in der Summe.</div></div>';
     }
     zone.innerHTML = head +
       '<div class="r-body scroll">' +
@@ -3147,7 +3229,7 @@ function renderRound(){
           '<div class="round-cat">Runde durch</div>' +
           '<div class="round-name">' + drinksDone + " von " + round.order.length + ' gezählt</div>' +
           '<div class="round-last">' + (missing.length
-            ? missing.length + (missing.length > 1 ? " Schritte wurden" : " Schritt wurde") + " übersprungen – " +
+            ? missing.length + (missing.length > 1 ? " Schritte wurden" : " Schritt wurde") + " übersprungen, " +
               "das ist in Ordnung, dafür wird dort nur kein Verbrauch berechnet."
             : "Alles erfasst.") + '</div>' +
         '</div>' +
@@ -3226,7 +3308,7 @@ function renderRound(){
     '</div></div>';
 }
 
-/* Wischen wechselt das Getränk – eine Hand, kein Zielen auf Knöpfe. */
+/* Wischen wechselt das Getränk, eine Hand, kein Zielen auf Knöpfe. */
 (function(){
   const zone = $("#roundZone");
   let x0 = null, y0 = null;
@@ -3239,7 +3321,7 @@ function renderRound(){
     const t = e.changedTouches[0];
     const dx = t.clientX - x0, dy = t.clientY - y0;
     x0 = null;
-    /* deutlich waagerecht und weit genug – sonst war es ein Tastendruck */
+    /* deutlich waagerecht und weit genug, sonst war es ein Tastendruck */
     if (Math.abs(dx) < 70 || Math.abs(dy) > Math.abs(dx) * 0.6) return;
     roundGo(dx < 0 ? 1 : -1, true);
   }, { passive: true });
@@ -3307,14 +3389,14 @@ function renderCount(){
   $("#countKpis").innerHTML = store.drinks.length
     ? kpi(String(store.drinks.length), "Getränke") +
       kpi(String(al.length), al.length === 1 ? "wird knapp" : "werden knapp") +
-      kpi(ls ? shortAge(ls.at) : "–", "zuletzt gezählt")
+      kpi(ls ? shortAge(ls.at) : "·", "zuletzt gezählt")
     : "";
 
   /* --- Erinnerung --- */
   const zone = $("#alertZone");
   if (!al.length){
     zone.innerHTML = store.drinks.length
-      ? '<div class="banner">Alles ausreichend bevorratet – nichts nachzukaufen.</div>'
+      ? '<div class="banner">Alles ausreichend bevorratet, nichts nachzukaufen.</div>'
       : '<div class="banner">Noch keine Getränke angelegt. Unter <b>Getränke</b> das erste hinzufügen.</div>';
   } else {
     zone.innerHTML =
@@ -3331,10 +3413,10 @@ function renderCount(){
   const startBox = $("#roundStart");
   if (!store.drinks.length){
     startBox.innerHTML = '<div class="small muted">Sobald Getränke angelegt sind, lässt sich hier eine ' +
-      'Zählrunde starten – ein Getränk nach dem anderen, mit Fortschrittsanzeige.</div>';
+      'Zählrunde starten, ein Getränk nach dem anderen, mit Fortschrittsanzeige.</div>';
   } else {
     /* Eine gerade gespeicherte Zählung lässt sich zurücknehmen, solange sie
-       frisch ist – der häufigste Fall ist ein Vertipper, der sofort auffällt. */
+       frisch ist, der häufigste Fall ist ein Vertipper, der sofort auffällt. */
     const undoable = ls && ls.session && (Date.now() - new Date(ls.at).getTime()) < 12 * 3600000;
     startBox.innerHTML =
       (pending.size
@@ -3403,16 +3485,16 @@ function renderCount(){
       ].filter(Boolean).join(" · ");
       else meta = "noch nie gezählt" + (d.category ? " · " + d.category : "");
 
-      /* Zweite Zeile rechts: die Reichweite, wenn es eine belastbare gibt –
+      /* Zweite Zeile rechts: die Reichweite, wenn es eine belastbare gibt,
          sonst die Menge in Einzeleinheiten. */
       const sp = settings.showPacks ? splitPack(num(val), d) : null;
       const sub = has ? "wird gespeichert"
         : (a.ok ? "noch " + fmt(a.daysLeft, a.daysLeft < 3 ? 1 : 0) + " Tage"
-                /* ohne Vorhersage: bei Kästen die Gesamtzahl, sonst nichts –
+                /* ohne Vorhersage: bei Kästen die Gesamtzahl, sonst nichts,
                    die Einheit steht schon in der Zeile darüber */
                 : (sp && sp.packs > 0 ? qtyUnit(num(val), unitOf(d)) : ""));
       const stock = val == null
-        ? '<b class="faint">–</b><span>nie gezählt</span>'
+        ? '<b class="faint">·</b><span>nie gezählt</span>'
         : '<b>' + esc(qtyText(val, d)) + '</b><span>' + esc(sub) + '</span>';
 
       return '<button class="srow' + (has ? " done" : "") + '" data-id="' + esc(d.id) + '">' +
@@ -3447,7 +3529,7 @@ $("#roundStart").addEventListener("click", e => {
   }
 });
 
-/* Ein einzelnes Getränk nachzählen – bei Lagerorten mit Ortswahl im Sheet */
+/* Ein einzelnes Getränk nachzählen, bei Lagerorten mit Ortswahl im Sheet */
 function singleCountSheet(d){
   const id = d.id, a = analyze(id);
   const locs = locNames();
@@ -3497,7 +3579,7 @@ async function saveCounts(){
   }
   const entries = Array.from(pending.entries()).map(([drinkId, qty]) => ({ drinkId, qty }));
 
-  /* Die Zusammenfassung muss vor dem Schreiben entstehen – danach ist die
+  /* Die Zusammenfassung muss vor dem Schreiben entstehen, danach ist die
      "letzte Zählung" die gerade gespeicherte. */
   const summary = entries.map(e => {
     const a = analyze(e.drinkId), d = a.drink;
@@ -3558,10 +3640,10 @@ function showSummary(rows, at, session){
 
   const line = r => {
     let val, sub;
-    if (r.first){ val = "–"; sub = "erste Zählung"; }
+    if (r.first){ val = "·"; sub = "erste Zählung"; }
     else if (r.anomaly){
       val = "+" + fmt(-r.consumed);
-      sub = "Bestand gestiegen – fehlt ein Einkauf?";
+      sub = "Bestand gestiegen, fehlt ein Einkauf?";
     } else {
       val = fmt(r.consumed);
       sub = "vorher " + qtyText(r.before, r.d) + (r.bought ? " (inkl. +" + fmt(r.bought) + " gekauft)" : "") +
@@ -3584,7 +3666,7 @@ function showSummary(rows, at, session){
     '</div>' +
     '<div class="kpis" style="margin-top:16px">' +
       kpi(fmt(totalUsed), "verbraucht") +
-      kpi(span != null ? fmt(span, 1) : "–", "Tage davor") +
+      kpi(span != null ? fmt(span, 1) : "·", "Tage davor") +
       kpi(String(used.length), "davon verbraucht") +
     '</div>' +
     cashSollBox(totalUsed, "Umsatz seit der letzten Zählung") +
@@ -3601,7 +3683,7 @@ function showSummary(rows, at, session){
         'Verbrauch lässt sich erst ab der zweiten Zählung berechnen.</div></div>'
       : "") +
     '<div class="section-title">Verbrauch seit der letzten Zählung</div>' +
-    '<div class="card">' + (rows.length ? rows.map(line).join("") : '<div class="empty">–</div>') + '</div>' +
+    '<div class="card">' + (rows.length ? rows.map(line).join("") : '<div class="empty">·</div>') + '</div>' +
     '<div class="btn-grid" style="margin-top:6px">' +
       '<button class="btn ghost" data-act="shop">Zur Einkaufsliste</button>' +
       '<button class="btn primary" data-act="done">Fertig</button></div>' +
@@ -3628,12 +3710,12 @@ function showSummary(rows, at, session){
 
    Die Liste hat zwei Quellen: automatisch aus der Warnschwelle/Vorhersage
    und von Hand hinzugefügt. Abgehakt wird eine Position, indem der Kauf
-   als Nachkauf gebucht wird – dadurch steigt der Bestand und die Position
+   als Nachkauf gebucht wird, dadurch steigt der Bestand und die Position
    verschwindet von selbst. Ein automatischer Vorschlag lässt sich auch
    wegwischen; er bleibt dann bis zur nächsten Zählung fort.
    --------------------------------------------------------------------- */
 /* Feste Dokument-Kennungen: ein Getränk steht höchstens einmal auf der Liste
-   und ist höchstens einmal ausgeblendet – egal wie hektisch getippt wird. */
+   und ist höchstens einmal ausgeblendet, egal wie hektisch getippt wird. */
 function shopKey(drinkId){ return "d_" + drinkId; }
 function skipKey(drinkId){ return "s_" + drinkId; }
 
@@ -3647,7 +3729,7 @@ function shopModel(){
 
   const out = [], used = {};
 
-  /* Reihenfolge richtet sich nach der Dringlichkeit – und bleibt gleich,
+  /* Reihenfolge richtet sich nach der Dringlichkeit, und bleibt gleich,
      wenn eine Position durch eine geänderte Menge auf die Liste wandert.
      Sonst springt die Zeile unter dem Finger weg. */
   alerts().forEach(x => {
@@ -3688,7 +3770,7 @@ function shopModel(){
   return out;
 }
 
-/* Schrittweite: ein ganzer Kasten, wo es einen gibt – sonst eine Einheit */
+/* Schrittweite: ein ganzer Kasten, wo es einen gibt, sonst eine Einheit */
 function shopStep(d){ return packSize(d) || 1; }
 
 function renderShop(){
@@ -3756,16 +3838,16 @@ function renderShop(){
 }
 
 /* Menge einer Position setzen. Ein automatischer Vorschlag, an dem gedreht
-   wird, wandert dabei fest auf die Liste – sonst wäre die Änderung beim
+   wird, wandert dabei fest auf die Liste, sonst wäre die Änderung beim
    nächsten Nachrechnen wieder weg. */
 async function shopWrite(d, data){
   await store.set("shopping", shopKey(d.id), data);
-  /* Ältere Einträge desselben Getränks mit zufälliger Kennung aufräumen –
+  /* Ältere Einträge desselben Getränks mit zufälliger Kennung aufräumen,
      sonst stünde es nach dem ersten Ändern doppelt auf der Liste. */
   const alt = store.shopping.filter(r => r.kind !== "skip" && r.drinkId === d.id && r.id !== shopKey(d.id));
   for (const r of alt) await store.remove("shopping", r.id);
 }
-/* Nimmt eine Position von der Liste. d fehlt bei freien Notizen – die haben
+/* Nimmt eine Position von der Liste. d fehlt bei freien Notizen, die haben
    kein Getränk und damit auch keine feste Kennung. */
 async function shopDrop(d, row){
   const ids = {};
@@ -3795,7 +3877,7 @@ $("#shopList").addEventListener("click", e => {
 });
 
 /* Eigene Funktion, damit ein Fehler nicht unbemerkt in einer offenen
-   Zusage hängen bleibt – genau daran scheiterte das Löschen freier Notizen. */
+   Zusage hängen bleibt, genau daran scheiterte das Löschen freier Notizen. */
 async function shopAction(e){
   const b = e.target.closest("[data-act]"); if (!b) return;
   const row = e.target.closest("[data-key]"); if (!row) return;
@@ -3824,14 +3906,14 @@ async function shopAction(e){
 
   if (act === "drop"){
     /* Das Kreuz heißt immer dasselbe: die Zeile soll weg. Bei einem Getränk
-       muss dafür beides passieren – die eigene Position löschen und den
+       muss dafür beides passieren, die eigene Position löschen und den
        automatischen Vorschlag stummschalten. Sonst stünde die Zeile sofort
        wieder da und es sähe aus, als sei nichts geschehen. */
     if (d){
       await shopDrop(d, it.row);
       await store.set("shopping", skipKey(d.id), { kind:"skip", drinkId: d.id, name:"", qty:0,
                                                    note:"", at: new Date().toISOString() });
-      toast("Von der Liste genommen – erscheint nach der nächsten Zählung wieder");
+      toast("Von der Liste genommen, erscheint nach der nächsten Zählung wieder");
     } else {
       await shopDrop(null, it.row);
       toast("Von der Liste genommen");
@@ -3847,7 +3929,7 @@ async function shopAction(e){
     }
     qtySheet({
       title: "Gekauft: " + d.name,
-      sub: "Wird als Einkauf gebucht – nur so stimmt der Verbrauch.",
+      sub: "Wird als Einkauf gebucht, nur so stimmt der Verbrauch.",
       drink: d, value: it.qty || "", okLabel: "Einbuchen",
       addTo: analyze(d.id).stock == null ? 0 : num(analyze(d.id).stock),
       onOk: async (v) => {
@@ -3878,7 +3960,7 @@ $("#buyList").addEventListener("click", e => {
 
 /* Position von Hand auf die Liste setzen */
 $("#shopAdd").addEventListener("click", () => {
-  const opts = '<option value="">– freie Notiz –</option>' +
+  const opts = '<option value="">freie Notiz</option>' +
     store.drinks.map(d => '<option value="' + esc(d.id) + '">' + esc(d.name) + '</option>').join("");
   sheet(
     '<h3>Auf die Einkaufsliste</h3>' +
@@ -3898,7 +3980,7 @@ $("#shopAdd").addEventListener("click", () => {
         wrap.classList.toggle("hide", !!d);
         hint.textContent = d
           ? "Vorgeschlagene Menge: " + qtyText(suggestBuy(analyze(d.id)), d, true) +
-            " – beim Abhaken lässt sie sich noch ändern."
+            ", beim Abhaken lässt sie sich noch ändern."
           : "";
       };
       sel.onchange = sync; sync();
@@ -3933,7 +4015,7 @@ $("#buyOpen").addEventListener("click", () => {
   };
   sheet(
     '<h3>Einkauf nachtragen</h3>' +
-    '<div class="small muted">Jeder Einkauf muss erfasst werden – sonst sieht es aus, als wäre weniger verbraucht worden.</div>' +
+    '<div class="small muted">Jeder Einkauf muss erfasst werden, sonst sieht es aus, als wäre weniger verbraucht worden.</div>' +
     '<div style="margin-top:14px">' +
     '<label class="fld"><span>Getränk</span><div class="row" style="gap:10px">' +
       '<select id="pDrink" style="flex:1;min-width:0">' +
@@ -3959,7 +4041,7 @@ $("#buyOpen").addEventListener("click", () => {
       });
       $("#pScan", el).onclick = () => scanSheet(code => {
         const d = drinkByEan(code);
-        if (!d) return toast("Code unbekannt – zuerst unter Getränke zuordnen");
+        if (!d) return toast("Code unbekannt, zuerst unter Getränke zuordnen");
         state.drinkId = d.id; $("#pDrink", el).value = d.id;
         $("#padBody", el).innerHTML = body();
         toast(d.name);
@@ -3974,7 +4056,7 @@ $("#buyOpen").addEventListener("click", () => {
         const v = padValue(d, state.st);
         if (!(v > 0)) return toast("Menge fehlt");
         /* Das Feld kennt nur Minuten. Solange es unverändert ist, die exakte
-           Uhrzeit verwenden – sonst rutscht ein Nachkauf vor eine gerade
+           Uhrzeit verwenden, sonst rutscht ein Nachkauf vor eine gerade
            gespeicherte Zählung und würde als Verbrauch gewertet. */
         const iso = (atTouched && at.value) ? new Date(at.value).toISOString() : new Date().toISOString();
         const sp = splitPack(v, d);
@@ -4031,7 +4113,7 @@ function drinkForm(d, preset){
   sheet(
     '<h3>' + (isNew ? "Neues Getränk" : "Getränk bearbeiten") + '</h3>' +
     /* Zwei Felder reichen für den Normalfall. Alles Weitere liegt
-       eingeklappt darunter – wer es braucht, findet es; wer nicht, wird
+       eingeklappt darunter, wer es braucht, findet es; wer nicht, wird
        nicht damit behelligt. */
     '<div style="margin-top:16px">' +
     '<label class="fld"><span>Name</span><input type="text" id="fName" value="' + esc(nameVal) + '" placeholder="z. B. Weizenbier 0,5"></label>' +
@@ -4069,7 +4151,7 @@ function drinkForm(d, preset){
       $("#fCancel", el).onclick = closeSheet;
       $("#fName", el).focus();
 
-      /* Barcode einscannen – der Dialog liegt über dem Sheet und gibt den
+      /* Barcode einscannen, der Dialog liegt über dem Sheet und gibt den
          Wert ins Feld zurück */
       $("#fScan", el).onclick = () => scanSheet(async code => {
         const other = drinkByEan(code);
@@ -4084,7 +4166,7 @@ function drinkForm(d, preset){
             nameEl.value = res.name;
             if (res.category && $("#fCat", el) && !$("#fCat", el).value.trim()) $("#fCat", el).value = res.category;
             toast("Gefunden: " + res.name);
-          } else if (!res) toast("Nicht in der Datenbank – bitte Namen eintragen");
+          } else if (!res) toast("Nicht in der Datenbank, bitte Namen eintragen");
         }
       }, { title: "Barcode des Getränks" });
 
@@ -4148,7 +4230,7 @@ function drinkForm(d, preset){
 
 /* ---------------------------------------------------------------------
    10) Statistik: Ranking, Verlaufsdiagramm, Verbrauchsabschnitte
-   Diagramme: eine Serie, eine Farbe – Zählpunkte und Nachkäufe werden
+   Diagramme: eine Serie, eine Farbe, Zählpunkte und Nachkäufe werden
    über die Form unterschieden (gefüllt vs. Ring), nicht über Farbe.
    --------------------------------------------------------------------- */
 let statState = { range: 30, cat: "", drinkId: "" };
@@ -4173,7 +4255,7 @@ function renderStats(){
   /* --- Ranking: eine Serie, Werte direkt beschriftet --- */
   const box = $("#statRank");
   if (!rank.length){
-    box.innerHTML = '<div class="empty" style="padding:12px">Für diesen Zeitraum liegen keine zwei Zählungen vor – ' +
+    box.innerHTML = '<div class="empty" style="padding:12px">Für diesen Zeitraum liegen keine zwei Zählungen vor, ' +
       'Verbrauch lässt sich erst zwischen zwei Zählungen berechnen.</div>';
   } else {
     const max = rank[0].total;
@@ -4189,7 +4271,7 @@ function renderStats(){
   const pool = store.drinks.filter(d => !statState.cat || d.category === statState.cat);
   const sel = $("#statDrink");
   if (!pool.length){
-    sel.innerHTML = '<option>– keine Getränke –</option>';
+    sel.innerHTML = '<option>keine Getränke</option>';
     $("#statChart").innerHTML = '<div class="empty" style="padding:12px">Keine Daten.</div>';
     $("#statSegments").innerHTML = "";
     return;
@@ -4201,7 +4283,7 @@ function renderStats(){
   drawChart();
   renderSegments();
 }
-/* Lange Werte wie "gestern" passen bei 320px nicht in 23px Schrift –
+/* Lange Werte wie "gestern" passen bei 320px nicht in 23px Schrift,
    deshalb schrumpft die Kennzahl, statt aus der Karte zu laufen. */
 function kpi(v, l){
   const t = String(v);
@@ -4309,7 +4391,7 @@ function renderSessions(){
     const mit = det.filter(x => x.consumed != null);
     const used = mit.reduce((a, b) => a + Math.max(0, b.consumed), 0);
     const anomal = det.some(x => x.consumed != null && x.consumed < -0.0001);
-    /* Welches Gerät gezählt hat, steht nur im Protokoll der Verwaltung –
+    /* Welches Gerät gezählt hat, steht nur im Protokoll der Verwaltung,
        hier sieht es jeder, deshalb nicht. */
     return '<button class="item" data-sess="' + esc(sess.key) + '" style="width:100%;text-align:left">' +
       '<div class="i-main"><div class="i-name">' + esc(fmtDateTime(sess.at)) + '</div>' +
@@ -4335,10 +4417,10 @@ function showSession(key){
 
   const line = r => {
     let val, sub;
-    if (r.consumed == null){ val = "–"; sub = "erste Zählung dieses Getränks"; }
+    if (r.consumed == null){ val = "·"; sub = "erste Zählung dieses Getränks"; }
     else if (r.consumed < -0.0001){
       val = "+" + fmt(-r.consumed);
-      sub = "Bestand gestiegen – Einkauf fehlt";
+      sub = "Bestand gestiegen, Einkauf fehlt";
     } else {
       val = fmt(r.consumed);
       sub = "vorher " + qtyText(num(r.prev.qty), r.d) +
@@ -4362,7 +4444,7 @@ function showSession(key){
       (sess.rows.length > 1 ? 'e' : '') + ' erfasst</div>' +
     '<div class="kpis" style="margin-top:16px">' +
       kpi(fmt(used), "verbraucht") +
-      kpi(spanne != null ? fmt(spanne, 1) : "–", "Tage davor") +
+      kpi(spanne != null ? fmt(spanne, 1) : "·", "Tage davor") +
       kpi(String(mit.length), "davon verbraucht") +
     '</div>' +
     cashSollBox(used, "Umsatz dieser Zählung") +
@@ -4501,7 +4583,7 @@ function renderSegments(){
 
   const anomalyHint = a.anomalies
     ? '<div class="banner" style="margin-top:8px"><div>' + a.anomalies +
-      ' Abschnitt(e) mit gestiegenem Bestand ohne erfassten Nachkauf. Diese fließen nicht in den Ø-Verbrauch ein – ' +
+      ' Abschnitt(e) mit gestiegenem Bestand ohne erfassten Nachkauf. Diese fließen nicht in den Ø-Verbrauch ein, ' +
       'fehlenden Einkauf unter <b>Einkauf</b> nachtragen.</div></div>'
     : "";
 
@@ -4509,8 +4591,8 @@ function renderSegments(){
 }
 
 /* ---------------------------------------------------------------------
-   11) QR-Code-Erzeugung (Byte-Modus, Fehlerkorrektur M, Version 1–10)
-   Vollständig lokal – keine externe Bibliothek, kein Server.
+   11) QR-Code-Erzeugung (Byte-Modus, Fehlerkorrektur M, Version 1-10)
+   Vollständig lokal, keine externe Bibliothek, kein Server.
    --------------------------------------------------------------------- */
 const QR = (function(){
   /* Version -> [EC-Codewörter je Block, [[Blockanzahl, Datencodewörter], …]] */
@@ -4758,7 +4840,7 @@ const QR = (function(){
    12) Mehr: QR-Code, Export, Datenbank-Einstellungen, Import
    --------------------------------------------------------------------- */
 function shareUrl(){
-  /* Nur die nackte Adresse – zufällige Parameter aus der Adresszeile
+  /* Nur die nackte Adresse, zufällige Parameter aus der Adresszeile
      gehören nicht auf einen gedruckten QR-Code. */
   const u = new URL(location.href);
   u.hash = ""; u.search = "";
@@ -4788,6 +4870,8 @@ function renderMore(){
   $$("#cfgTheme button").forEach(b => b.classList.toggle("on", b.dataset.theme === th));
   const tx = currentText();
   $$("#cfgText button").forEach(b => b.classList.toggle("on", b.dataset.text === tx));
+  const sk = currentSkin();
+  $$("#cfgSkin button").forEach(b => b.classList.toggle("on", b.dataset.skin === sk));
 
 
   const hatCode = !!currentPinHash();
@@ -4803,7 +4887,7 @@ function renderMore(){
       '1 Kasten = ' + DEFAULT_PACK_SIZE + ' Flaschen heißt das: Meldung ab <b>' +
       (DEFAULT_PACK_SIZE * n) + ' Flaschen</b>; Getränke mit abweichender ' +
       'Kastengröße entsprechend. Ein eigener Mindestbestand am Getränk geht vor.'
-    : 'Ausgeschaltet – gewarnt wird dann nur über die Reichweite in Tagen ' +
+    : 'Ausgeschaltet, gewarnt wird dann nur über die Reichweite in Tagen ' +
       'und über den Mindestbestand am einzelnen Getränk.';
   if (document.activeElement !== $("#cfgFb"))
     $("#cfgFb").value = settings.fb ? JSON.stringify(settings.fb, null, 2) : "";
@@ -4827,9 +4911,9 @@ function renderMore(){
   else if (store.mode === "firebase" && store.status === "offline")
     { msg = "<b>Offline.</b> Es wird der zuletzt geladene Stand angezeigt. " +
         (store.pendingWrites() ? "Eigene Änderungen sind noch nicht übertragen und gehen raus, sobald wieder Netz da ist."
-                               : "Zählungen lassen sich trotzdem erfassen – sie werden später übertragen."); }
+                               : "Zählungen lassen sich trotzdem erfassen, sie werden später übertragen."); }
   else if (store.status === "error")
-    { msg = "<b>Verbindung fehlgeschlagen.</b> " + esc(store.error) + " – bis dahin wird nur lokal auf diesem Gerät gespeichert."; }
+    { msg = "<b>Verbindung fehlgeschlagen.</b> " + esc(store.error) + ", bis dahin wird nur lokal auf diesem Gerät gespeichert."; }
   else
     { msg = "<b>Nur auf diesem Gerät.</b> Ohne Firebase-Konfiguration werden die Daten lokal im Browser gespeichert und nicht geteilt."; }
   $("#dbStatus").innerHTML = '<div class="' + cls + '">' + msg + '</div>';
@@ -4960,11 +5044,11 @@ $("#cfgSave").addEventListener("click", async () => {
   settings.minPacks = Math.min(20, Math.max(0, Math.round(num($("#cfgMinPacks").value, 1))));
   settings.showPacks = $("#cfgPacks").checked;
   saveSettings();
-  toast("Gespeichert – verbinde…");
+  toast("Gespeichert, verbinde…");
   await store.connect();
   renderAll();
 });
-/* Unterseite (Wünsche / Umfrage) im Overlay öffnen – damit man auch als
+/* Unterseite (Wünsche / Umfrage) im Overlay öffnen, damit man auch als
    installierte PWA (ohne Safari-Leiste) immer wieder herauskommt. */
 function openInApp(page, title){
   const bar = (settings.barId && settings.barId !== DEFAULT_BAR_ID) ? "?bar=" + encodeURIComponent(settings.barId) : "";
@@ -5037,7 +5121,7 @@ $("#cfgCashPrice").addEventListener("change", async () => {
   await saveBarSettings(); renderAll();
   toast("Preis: " + eur(settings.cashPrice) + " je Getränk");
 });
-/* Feld für den Master-Code – nur nötig, wenn schon einer eingerichtet ist */
+/* Feld für den Master-Code, nur nötig, wenn schon einer eingerichtet ist */
 function masterField(){
   return hasMaster()
     ? '<label class="fld"><span>Master-Code</span>' +
@@ -5087,7 +5171,7 @@ $("#resetOpen").addEventListener("click", () => {
     '<button class="btn block" data-act="export" style="margin-bottom:16px">Vorher als JSON sichern</button>' +
     '<div>' + masterField() +
     '<label class="fld"><span>Was soll weg?</span><select id="rScope">' +
-      '<option value="counts">Nur Zählungen und Nachkäufe – Getränke bleiben</option>' +
+      '<option value="counts">Nur Zählungen und Nachkäufe, Getränke bleiben</option>' +
       '<option value="all">Alles, auch die Getränkeliste</option>' +
     '</select></label>' +
     '</div>' +
@@ -5183,8 +5267,8 @@ $("#pinChange").addEventListener("click", () => {
         await saveBarSettings();
         logActivity("Zugangscode geändert", "");
         closeSheet();
-        toast(store.mode === "firebase" ? "Code geändert – gilt für alle Geräte"
-                                        : "Code geändert – nur auf diesem Gerät");
+        toast(store.mode === "firebase" ? "Code geändert, gilt für alle Geräte"
+                                        : "Code geändert, nur auf diesem Gerät");
         renderAll();
       };
     });
@@ -5214,7 +5298,7 @@ function showLog(){
   const devIds = Object.keys(geraete);
   const list = rows.filter(r => !logFilter || r.dev === logFilter);
 
-  /* Nach Tag gruppieren – so liest sich das Protokoll wie ein Tagebuch */
+  /* Nach Tag gruppieren, so liest sich das Protokoll wie ein Tagebuch */
   let html = "", tag = "";
   list.forEach(r => {
     const t = r.at ? fmtDate(r.at) : "?";
@@ -5275,6 +5359,13 @@ $("#cfgTheme").addEventListener("click", e => {
   renderAll();
 });
 
+$("#cfgSkin").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  applySkin(b.dataset.skin);
+  toast(b.dataset.skin === "classic" ? "Klassischer Stil" : "Brutaler Stil");
+  renderAll();
+});
+
 $("#cfgPacks").addEventListener("change", e => {
   settings.showPacks = e.target.checked;
   saveSettings(); renderAll();
@@ -5292,8 +5383,8 @@ function renderAll(){
       : (store.status === "error" ? "err" : "off"));
   dot.title = store.status === "connecting" ? "Verbinde…"
     : store.mode === "firebase"
-      ? (store.status === "online" ? "Mit Firestore verbunden" : "Offline – wird später übertragen")
-      : (store.status === "error" ? "Verbindung fehlgeschlagen – nur lokal" : "Nur lokal auf diesem Gerät");
+      ? (store.status === "online" ? "Mit Firestore verbunden" : "Offline, wird später übertragen")
+      : (store.status === "error" ? "Verbindung fehlgeschlagen, nur lokal" : "Nur lokal auf diesem Gerät");
   $("#barLabel").textContent = store.status === "connecting" ? "verbinde…"
     : store.mode === "firebase" ? "Bestand · " + settings.barId
     : "Bestand · lokal";
@@ -5307,6 +5398,7 @@ window.addEventListener("offline", () => { if (store.mode === "firebase") store.
 
 store.onChange(renderAll);
 applyTheme(currentTheme());
+applySkin(currentSkin());
 fetchDeviceIp(); refineDeviceModel();
 initLock();
 restoreRound();
