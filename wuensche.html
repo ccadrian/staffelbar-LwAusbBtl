@@ -111,11 +111,11 @@ textarea{min-height:64px;resize:vertical}
 </header>
 
 <main class="wrap">
-  <div class="intro">Trag ein, was in die Bar soll – neue Getränke, Snacks, Ideen für die Zukunft. Bei Wünschen anderer auf <b>„Ich auch"</b> tippen, damit die beliebtesten oben stehen.</div>
+  <div class="intro">Trag ein, was in die Staffel Bar soll, neue Getränke, Snacks? Bei Wünschen anderer auf <b>„Ich auch"</b> tippen, damit die beliebtesten oben stehen.</div>
 
   <div class="card">
     <label class="fld"><span>Wunsch</span>
-      <textarea id="wText" maxlength="280" placeholder="z. B. Alkoholfreies Weizen ins Sortiment, neue Dartscheibe, Zitronen nachbestellen …"></textarea>
+      <textarea id="wText" maxlength="280" placeholder="z. B. Alkoholfreies Weizen, neue Dartscheibe, Zitronen …"></textarea>
     </label>
     <div class="row" style="margin-top:2px">
       <input type="text" id="wWho" maxlength="40" placeholder="Dein Name (optional)" style="flex:1;min-width:0">
@@ -221,7 +221,7 @@ function closeModal(){ $("#modalRoot").innerHTML=""; document.body.style.overflo
 
 function adminPrompt(){
   modal('<h3>Verwalten</h3>'+
-    '<div class="hint">Nur für Admins. Mit dem Verwaltungs-Code lassen sich Wünsche bearbeiten und löschen – </div>'+
+    '<div class="hint">Nur mit Zugangscode! </div>'+
     '<label class="fld"><span>Code</span><input type="password" id="aCode" inputmode="numeric" autocomplete="off" placeholder="Verwaltungs-Code"></label>'+
     '<button class="btn primary block" id="aOk" style="margin-top:4px">Freischalten</button>'+
     '<button class="btn block" id="aNo" style="margin-top:8px">Abbrechen</button>',
