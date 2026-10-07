@@ -752,6 +752,10 @@ details.fold .fold-in{padding:0 1.125rem 1.125rem}
     <button class="btn primary block" id="wishOpen">Wunschliste öffnen &rarr;</button>
     <button class="btn block" id="wishCopy" style="margin-top:8px">Link zum Weitergeben kopieren</button>
 
+    <div class="section-title">Umfrage</div>
+    <button class="btn primary block" id="pollOpen">Umfrage öffnen &rarr;</button>
+    <button class="btn block" id="pollCopy" style="margin-top:8px">Link zum Weitergeben kopieren</button>
+
     <div class="section-title">Einstellungen</div>
     <div class="card">
       <label class="fld" style="margin-bottom:10px"><span>Darstellung</span></label>
@@ -953,7 +957,7 @@ const DEFAULT_BAR_ID = "staffelbar";
    Getränk selbst, und eine 0 dort heißt "gibt es nur einzeln". */
 const DEFAULT_PACK_SIZE = 20;
 
-const APP_VERSION = "1.9";
+const APP_VERSION = "2.0";
 const SDK = "https://www.gstatic.com/firebasejs/10.13.2/";
 
 /* ---------------------------------------------------------------------
@@ -4960,39 +4964,44 @@ $("#cfgSave").addEventListener("click", async () => {
   await store.connect();
   renderAll();
 });
-function wishShareUrl(){
-  try {
-    const u = new URL("wuensche.html", location.href);   // ASCII-Alias – überall tippbar
-    if (settings.barId && settings.barId !== DEFAULT_BAR_ID) u.searchParams.set("bar", settings.barId);
-    return u.toString();
-  } catch(_){ return location.origin + "/wuensche.html"; }
-}
-function openWishes(){
+/* Unterseite (Wünsche / Umfrage) im Overlay öffnen – damit man auch als
+   installierte PWA (ohne Safari-Leiste) immer wieder herauskommt. */
+function openInApp(page, title){
   const bar = (settings.barId && settings.barId !== DEFAULT_BAR_ID) ? "?bar=" + encodeURIComponent(settings.barId) : "";
   const ov = document.createElement("div");
-  ov.className = "wish-overlay"; ov.id = "wishOverlay";
+  ov.className = "wish-overlay"; ov.id = "appOverlay";
   ov.innerHTML =
-    '<div class="wish-ov-top"><div class="t">Wünsche</div>' +
-      '<button class="wish-ov-close" id="wishOvClose" aria-label="Schließen">&#10005; Schließen</button></div>' +
-    '<iframe src="./wünsche.html' + bar + '" title="Wünsche"></iframe>';
+    '<div class="wish-ov-top"><div class="t">' + esc(title) + '</div>' +
+      '<button class="wish-ov-close" id="appOvClose" aria-label="Schließen">&#10005; Schließen</button></div>' +
+    '<iframe src="./' + page + bar + '" title="' + esc(title) + '"></iframe>';
   document.body.appendChild(ov);
   document.body.style.overflow = "hidden";
-  const close = () => { const o = document.getElementById("wishOverlay"); if (o) o.remove(); document.body.style.overflow = ""; };
-  document.getElementById("wishOvClose").onclick = close;
-  /* Zurück-Geste / Hardware-Zurück schließt das Overlay, statt die App zu verlassen */
-  history.pushState({ wishOv: 1 }, "");
+  const close = () => { const o = document.getElementById("appOverlay"); if (o) o.remove(); document.body.style.overflow = ""; };
+  document.getElementById("appOvClose").onclick = close;
+  history.pushState({ appOv: 1 }, "");
   const onPop = () => { close(); window.removeEventListener("popstate", onPop); };
   window.addEventListener("popstate", onPop);
 }
+function copyShareUrl(file, label){
+  let url;
+  try { const u = new URL(file, location.href);
+    if (settings.barId && settings.barId !== DEFAULT_BAR_ID) u.searchParams.set("bar", settings.barId);
+    url = u.toString();
+  } catch(_){ url = location.origin + "/" + file; }
+  (async () => {
+    try { await navigator.clipboard.writeText(url); toast(label + " kopiert"); }
+    catch(_){ prompt("Link zum Weitergeben:", url); }
+  })();
+}
 const wishOpenBtn = document.getElementById("wishOpen");
-if (wishOpenBtn) wishOpenBtn.addEventListener("click", openWishes);
-
+if (wishOpenBtn) wishOpenBtn.addEventListener("click", () => openInApp("wünsche.html", "Wünsche"));
 const wishCopyBtn = document.getElementById("wishCopy");
-if (wishCopyBtn) wishCopyBtn.addEventListener("click", async () => {
-  const url = wishShareUrl();
-  try { await navigator.clipboard.writeText(url); toast("Wünsche-Link kopiert"); }
-  catch(_){ prompt("Link zum Weitergeben:", url); }
-});
+if (wishCopyBtn) wishCopyBtn.addEventListener("click", () => copyShareUrl("wuensche.html", "Wünsche-Link"));
+
+const pollOpenBtn = document.getElementById("pollOpen");
+if (pollOpenBtn) pollOpenBtn.addEventListener("click", () => openInApp("umfrage.html", "Umfrage"));
+const pollCopyBtn = document.getElementById("pollCopy");
+if (pollCopyBtn) pollCopyBtn.addEventListener("click", () => copyShareUrl("umfrage.html", "Umfrage-Link"));
 
 $("#cfgClear").addEventListener("click", () => {
   askConfirm("Einstellungen zurücksetzen?",

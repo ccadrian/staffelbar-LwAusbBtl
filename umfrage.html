@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<title>Staffelbar · Umfrage</title>
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#ffffff; --bg-2:#f4f4f5; --card:#ffffff; --card-2:#efeff1;
+  --line:#e4e4e7; --line-2:#111113; --fg:#000000; --fg-dim:#4a4a50; --fg-faint:#6b6b73;
+  --accent:#000000; --accent-ink:#ffffff; --ring:rgba(0,0,0,.10);
+  --r:0.625rem; --tap:3.5rem; --safe-b:env(safe-area-inset-bottom,0);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#000000; --bg-2:#0c0c0d; --card:#0d0d0f; --card-2:#17171a;
+  --line:#242428; --line-2:#fafafa; --fg:#ffffff; --fg-dim:#b4b4bc; --fg-faint:#8a8a92;
+  --accent:#ffffff; --accent-ink:#000000; --ring:rgba(255,255,255,.14);
+}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--fg);
+  font:1.0625rem/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;letter-spacing:-.011em;padding-bottom:calc(28px + var(--safe-b));
+  overscroll-behavior-y:contain}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-.03em}
+button,input,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+button{cursor:pointer;border:none;background:none}
+a{color:var(--fg)}
+.hide{display:none!important}
+.wrap{max-width:40rem;margin:0 auto;padding:0 1.125rem}
+header.top{position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:0.125rem solid var(--line-2);
+  transform:translateZ(0)}
+.top-in{max-width:40rem;margin:0 auto;padding:0.875rem 1.125rem;display:flex;align-items:center;gap:0.75rem}
+.brand{flex:1;min-width:0;font-size:1.25rem;font-weight:800;text-transform:uppercase;letter-spacing:-.01em}
+.brand small{display:block;font-size:0.6875rem;font-weight:600;color:var(--fg-faint);
+  text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.dot{width:0.5rem;height:0.5rem;border-radius:50%;flex:none;background:var(--fg-faint)}
+.dot.on{background:var(--fg)} .dot.off{background:transparent;box-shadow:inset 0 0 0 1.5px var(--fg-faint)}
+.dot.err{background:transparent;box-shadow:inset 0 0 0 4px var(--fg)}
+.anon{display:flex;align-items:center;gap:0.5rem;margin:1rem 0 1.25rem;font-size:0.8125rem;color:var(--fg-dim);
+  border:0.0625rem solid var(--line);border-radius:var(--r);padding:0.625rem 0.75rem;font-weight:500}
+.anon b{color:var(--fg);font-weight:700}
+
+/* ---- Umfrage-Karte (brutal: dicke Kante, große Zahl, blockig) ---- */
+.poll{border:0.125rem solid var(--line-2);border-radius:var(--r);margin-bottom:1.125rem;overflow:hidden;background:var(--card)}
+.poll.closed{opacity:.72}
+.p-head{padding:1rem 1.125rem 0.875rem}
+.p-title{font-size:1.5rem;font-weight:800;line-height:1.1;letter-spacing:-.03em;word-break:break-word;text-transform:uppercase}
+.p-meta{margin-top:0.375rem;font-size:0.8125rem;font-weight:600;color:var(--fg-faint);
+  text-transform:uppercase;letter-spacing:.05em}
+.p-q{margin-top:0.625rem;font-size:0.9375rem;color:var(--fg-dim);font-weight:500}
+.p-hero{display:flex;align-items:baseline;gap:0.625rem;padding:0.25rem 1.125rem 0.75rem}
+.p-hero .n{font-size:4rem;font-weight:800;line-height:0.95;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.p-hero .lab{font-size:1rem;font-weight:800;text-transform:uppercase;letter-spacing:.02em;color:var(--fg-dim)}
+.p-bar{display:flex;height:0.5rem;margin:0 1.125rem 0.75rem;border:0.0625rem solid var(--line-2);overflow:hidden}
+.p-bar .ja{background:var(--fg)} .p-bar .nein{background:transparent}
+.p-break{padding:0 1.125rem 0.875rem;font-size:0.8125rem;color:var(--fg-faint);font-weight:600;
+  display:flex;gap:0.875rem;flex-wrap:wrap;text-transform:uppercase;letter-spacing:.03em}
+.p-break b{color:var(--fg)}
+.p-vote{display:grid;grid-template-columns:1fr 1fr;border-top:0.125rem solid var(--line-2)}
+.p-vote button{height:var(--tap);font-size:1.0625rem;font-weight:800;text-transform:uppercase;letter-spacing:.02em;
+  display:flex;align-items:center;justify-content:center;gap:0.5rem;background:var(--bg);color:var(--fg)}
+.p-vote button:first-child{border-right:0.125rem solid var(--line-2)}
+.p-vote button:active{background:var(--card-2)}
+.p-vote button.sel{background:var(--accent);color:var(--accent-ink)}
+.p-vote button[disabled]{opacity:.5;pointer-events:none}
+.p-closed-tag{display:inline-block;margin:0 1.125rem 0.875rem;padding:0.25rem 0.5rem;border:0.0625rem solid var(--line-2);
+  font-size:0.6875rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.p-admin{display:flex;gap:0.5rem;flex-wrap:wrap;padding:0.75rem 1.125rem;border-top:0.0625rem solid var(--line)}
+.mini{min-height:2.25rem;padding:0 0.75rem;border:0.0625rem solid var(--line-2);background:transparent;
+  font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.mini:active{background:var(--card-2)}
+
+.empty{padding:2.5rem 1rem;text-align:center;color:var(--fg-faint);font-size:0.9375rem;line-height:1.55}
+.section-title{font-size:0.6875rem;text-transform:uppercase;letter-spacing:.09em;color:var(--fg-faint);
+  margin:1.75rem 0 0.75rem;font-weight:800}
+
+/* ---- Eingabe/Modal ---- */
+label.fld{display:block;margin-bottom:0.875rem}
+label.fld>span{display:block;font-size:0.75rem;font-weight:700;color:var(--fg-dim);
+  text-transform:uppercase;letter-spacing:.05em;margin-bottom:0.4375rem}
+input[type=text],input[type=date],textarea{width:100%;min-height:3rem;padding:0.75rem 0.875rem;border-radius:var(--r);
+  background:var(--bg);border:0.125rem solid var(--line-2);outline:none}
+input:focus,textarea:focus{box-shadow:0 0 0 3.5px var(--ring)}
+.btn{min-height:var(--tap);padding:0 1.125rem;border-radius:var(--r);background:transparent;border:0.125rem solid var(--line-2);
+  font-weight:800;text-transform:uppercase;letter-spacing:.02em;display:inline-flex;align-items:center;justify-content:center;
+  gap:0.5rem;font-size:0.9375rem;width:100%}
+.btn:active{background:var(--card-2)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.adminbar{text-align:center;padding:0.5rem 0 1.5rem}
+.adminlink{font-size:0.75rem;color:var(--fg-faint);border:0.0625rem solid transparent;padding:0.4375rem 0.75rem;
+  border-radius:0.5rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.adminlink.on{color:var(--fg);border-color:var(--line-2)}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:32.5rem;background:var(--bg);border-top:0.125rem solid var(--line-2);
+  border-radius:1rem 1rem 0 0;padding:1.25rem 1.125rem calc(1.125rem + var(--safe-b));max-height:92vh;overflow-y:auto}
+.sheet h3{margin-bottom:0.25rem;text-transform:uppercase}
+.sheet .hint{color:var(--fg-dim);font-size:0.85rem;line-height:1.5;margin:0.25rem 0 0.875rem}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(1.5rem + var(--safe-b));z-index:200;
+  background:var(--fg);color:var(--bg);padding:0.6875rem 1.125rem;border-radius:0.5rem;font-weight:700;font-size:0.875rem;
+  max-width:90vw;text-align:center}
+.foot{text-align:center;color:var(--fg-faint);font-size:0.72rem;padding:1.25rem 0 0.5rem;
+  text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">Umfrage <small id="sub">Bist du dabei?</small></div>
+    <div class="dot" id="dot" title="Verbindung"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="anon">
+    <b>Anonym.</b> Niemand sieht, wer wie abgestimmt hat – nur die Anzahl zählt.
+  </div>
+
+  <div id="adminActions" class="hide" style="margin-bottom:1.125rem"></div>
+  <div id="polls"></div>
+
+  <div class="section-title hide" id="closedTitle">Beendet</div>
+  <div id="closedPolls"></div>
+
+  <div class="foot" id="foot"></div>
+  <div class="adminbar"><button class="adminlink" id="adminToggle">Verwalten</button></div>
+</main>
+
+<div id="toastRoot"></div>
+<div id="modalRoot"></div>
+
+<script>
+/* =====================================================================
+   Staffelbar · Umfrage – eigenständige Seite, gleiche Firestore-Datenbank.
+   polls      bars/<bar>/polls/<id>        { title, date, q, at, closed }
+   pollvotes  bars/<bar>/pollvotes/<id>     { pollId, choice, at }
+     Stimm-ID = "<pollId>__<geräteId>" -> eine Stimme pro Gerät, änderbar,
+     ohne Namen. Admin sieht nur die Summen. Passt in die 2-Ebenen-Regeln.
+   ===================================================================== */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB3Sz9CUOg1ApFeI4QodFfN5AtLKLwqVf8",
+  authDomain: "lwausbbtl-39ae4.firebaseapp.com",
+  projectId: "lwausbbtl-39ae4",
+  storageBucket: "lwausbbtl-39ae4.firebasestorage.app",
+  messagingSenderId: "1095525431675",
+  appId: "1:1095525431675:web:ae0e601e19c886970065de"
+};
+const SDK = "https://www.gstatic.com/firebasejs/10.13.2/";
+const DEFAULT_BAR_ID = "staffelbar";
+/* Verwaltungs-Code 0080 (gleich wie bei den Wünschen), nur als Hash. */
+const ADMIN_HASH = "c339bbeb99b16155e3ae8d8cbbcce2a10e7693f6e51c7b8012e224e88970c8c8";
+const ADMIN_KEY = "staffelbar.polladmin";
+
+const $ = (s, r) => (r || document).querySelector(s);
+const barId = (new URLSearchParams(location.search).get("bar") || DEFAULT_BAR_ID)
+  .trim().replace(/[^\w\-]/g, "-") || DEFAULT_BAR_ID;
+
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g,
+  c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
+function num(v, f){ const n = Number(v); return Number.isFinite(n) ? n : (f===undefined?0:f); }
+function uid(){ return (crypto.randomUUID ? crypto.randomUUID()
+  : "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,10)); }
+let toastT = null;
+function toast(m){ const o=$(".toast"); if(o)o.remove();
+  const e=document.createElement("div"); e.className="toast"; e.textContent=m;
+  $("#toastRoot").appendChild(e); clearTimeout(toastT); toastT=setTimeout(()=>e.remove(),2600); }
+function fmtDate(s){ if(!s) return ""; const d=new Date(s+"T00:00:00");
+  return isNaN(d) ? s : d.toLocaleDateString("de-DE",{weekday:"short",day:"2-digit",month:"2-digit",year:"2-digit"}); }
+
+const DEV_KEY = "staffelbar.device";
+function deviceId(){ let v=""; try{ v=localStorage.getItem(DEV_KEY)||""; }catch(_){}
+  if(!v){ v=uid(); try{ localStorage.setItem(DEV_KEY,v); }catch(_){} } return v; }
+const MYVOTE_KEY = "staffelbar.pollchoice." + barId;
+function myChoices(){ try{ return JSON.parse(localStorage.getItem(MYVOTE_KEY)||"{}")||{}; }catch(_){ return {}; } }
+function setMyChoice(pollId,choice){ const m=myChoices(); if(choice)m[pollId]=choice; else delete m[pollId];
+  try{ localStorage.setItem(MYVOTE_KEY,JSON.stringify(m)); }catch(_){} }
+
+async function pinHash(pin){
+  const txt = "staffelbar:" + String(pin == null ? "" : pin).trim();
+  try{ if(crypto.subtle && crypto.subtle.digest){
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }}catch(_){}
+  let h=5381; for(let i=0;i<txt.length;i++) h=((h*33)^txt.charCodeAt(i))>>>0; return "x"+h.toString(16);
+}
+function isAdmin(){ try{ return localStorage.getItem(ADMIN_KEY)===ADMIN_HASH && !!ADMIN_HASH; }catch(_){ return false; } }
+function setAdmin(on){ try{ if(on) localStorage.setItem(ADMIN_KEY,ADMIN_HASH); else localStorage.removeItem(ADMIN_KEY); }catch(_){} }
+
+/* ---- Datenspeicher ---- */
+const store = {
+  mode:"local", status:"init", polls:[], pollvotes:[], _fs:null, _db:null, _un:[],
+  async connect(){
+    const c=FIREBASE_CONFIG;
+    if(!c||!c.apiKey||!c.projectId){ this.mode="local"; this.status="local"; this._loadLocal(); render(); return; }
+    this.status="connecting"; renderDot();
+    try{
+      const to=p=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(new Error("Zeitüberschreitung")),15000))]);
+      const [appMod,fsMod]=await to(Promise.all([import(SDK+"firebase-app.js"),import(SDK+"firebase-firestore.js")]));
+      const app=appMod.initializeApp(c,"umfrage-"+Date.now());
+      let db; try{ db=fsMod.initializeFirestore(app,{localCache:fsMod.persistentLocalCache({tabManager:fsMod.persistentMultipleTabManager()})}); }
+      catch(_){ db=fsMod.getFirestore(app); }
+      this._fs=fsMod; this._db=db; this.mode="firebase"; this._listen();
+    }catch(e){ console.error(e); this.mode="local"; this.status="error"; this._loadLocal(); render(); }
+  },
+  _col(c){ return this._fs.collection(this._db,"bars",barId,c); },
+  _doc(c,id){ return this._fs.doc(this._db,"bars",barId,c,id); },
+  _listen(){
+    const f=this._fs;
+    const bind=(coll,key,order)=>{ const q=f.query(this._col(coll), f.orderBy(order,"desc"), f.limit(coll==="pollvotes"?5000:200));
+      this._un.push(f.onSnapshot(q, snap=>{ this[key]=snap.docs.map(d=>Object.assign({id:d.id},d.data()));
+        this.status = snap.metadata.fromCache && !navigator.onLine ? "offline":"online"; render();
+      }, err=>{ console.error(coll,err); this.status="error"; render(); })); };
+    bind("polls","polls","at"); bind("pollvotes","pollvotes","at");
+  },
+  async add(coll,data){ if(this.mode==="firebase") return (await this._fs.addDoc(this._col(coll),data)).id;
+    const id=uid(); this[coll].unshift(Object.assign({id},data)); this._saveLocal(); render(); return id; },
+  async setId(coll,id,data){ if(this.mode==="firebase"){ await this._fs.setDoc(this._doc(coll,id),data); return; }
+    const i=this[coll].findIndex(x=>x.id===id); if(i>=0) this[coll][i]=Object.assign({id},data); else this[coll].unshift(Object.assign({id},data));
+    this._saveLocal(); render(); },
+  async update(coll,id,data){ if(this.mode==="firebase"){ await this._fs.updateDoc(this._doc(coll,id),data); return; }
+    const x=this[coll].find(y=>y.id===id); if(x)Object.assign(x,data); this._saveLocal(); render(); },
+  async remove(coll,id){ if(this.mode==="firebase"){ await this._fs.deleteDoc(this._doc(coll,id)); return; }
+    this[coll]=this[coll].filter(x=>x.id!==id); this._saveLocal(); render(); },
+  _lsKey(){ return "staffelbar.poll."+barId; },
+  _loadLocal(){ try{ const d=JSON.parse(localStorage.getItem(this._lsKey())||"{}")||{};
+    this.polls=Array.isArray(d.polls)?d.polls:[]; this.pollvotes=Array.isArray(d.pollvotes)?d.pollvotes:[]; }catch(_){ this.polls=[]; this.pollvotes=[]; } },
+  _saveLocal(){ try{ localStorage.setItem(this._lsKey(),JSON.stringify({polls:this.polls,pollvotes:this.pollvotes})); }catch(_){} }
+};
+
+/* ---- Zählen & Abstimmen ---- */
+function countsFor(pollId){
+  let ja=0,nein=0;
+  store.pollvotes.forEach(v=>{ if(v.pollId!==pollId) return; if(v.choice==="ja")ja++; else if(v.choice==="nein")nein++; });
+  return { ja, nein, total: ja+nein };
+}
+async function vote(pollId, choice){
+  const poll=store.polls.find(p=>p.id===pollId); if(!poll || poll.closed) return;
+  const id = pollId + "__" + deviceId();
+  const cur = myChoices()[pollId];
+  try{
+    if(cur===choice){ setMyChoice(pollId,null); await store.remove("pollvotes", id); }
+    else { setMyChoice(pollId,choice); await store.setId("pollvotes", id, { pollId, choice, at:new Date().toISOString() }); }
+    render();
+  }catch(e){ console.error(e); toast("Stimme konnte nicht gespeichert werden"); }
+}
+
+/* ---- Rendern ---- */
+function pollCard(p){
+  const c=countsFor(p.id); const mine=myChoices()[p.id];
+  const pct = c.total ? Math.round(c.ja/c.total*100) : 0;
+  return '<div class="poll'+(p.closed?" closed":"")+'" data-id="'+esc(p.id)+'">'+
+    '<div class="p-head"><div class="p-title">'+esc(p.title)+'</div>'+
+      (p.date?'<div class="p-meta">'+esc(fmtDate(p.date))+'</div>':'')+
+      '<div class="p-q">'+esc(p.q||"Bist du dabei?")+'</div></div>'+
+    '<div class="p-hero"><div class="n">'+c.ja+'</div><div class="lab">dabei</div></div>'+
+    (c.total?'<div class="p-bar"><div class="ja" style="width:'+pct+'%"></div><div class="nein" style="width:'+(100-pct)+'%"></div></div>':'')+
+    '<div class="p-break"><span><b>'+c.ja+'</b> dabei</span><span><b>'+c.nein+'</b> nicht dabei</span><span><b>'+c.total+'</b> abgestimmt</span></div>'+
+    (p.closed
+      ? '<div class="p-closed-tag">Beendet</div>'
+      : '<div class="p-vote">'+
+          '<button data-c="ja" class="'+(mine==="ja"?"sel":"")+'">'+(mine==="ja"?"&#10003; ":"")+'Dabei</button>'+
+          '<button data-c="nein" class="'+(mine==="nein"?"sel":"")+'">'+(mine==="nein"?"&#10003; ":"")+'Nicht</button>'+
+        '</div>')+
+    (isAdmin()
+      ? '<div class="p-admin">'+
+          (p.closed?'<button class="mini" data-a="open">Wieder öffnen</button>':'<button class="mini" data-a="close">Beenden</button>')+
+          '<button class="mini" data-a="reset">Stimmen zurücksetzen</button>'+
+          '<button class="mini" data-a="del">Löschen</button>'+
+        '</div>'
+      : '')+
+  '</div>';
+}
+function render(){
+  renderDot();
+  const open=store.polls.filter(p=>!p.closed);
+  const closed=store.polls.filter(p=>p.closed);
+  const host=$("#polls");
+  if(!open.length && !closed.length){
+    host.innerHTML='<div class="empty">'+(isAdmin()
+      ? 'Noch keine Umfrage. Unten über <b>Verwalten</b> die erste erstellen.'
+      : 'Zurzeit läuft keine Umfrage.')+'</div>';
+  } else {
+    host.innerHTML = open.length ? open.map(pollCard).join("") : '<div class="empty">Zurzeit läuft keine offene Umfrage.</div>';
+  }
+  $("#closedTitle").classList.toggle("hide", closed.length===0);
+  $("#closedPolls").innerHTML = closed.map(pollCard).join("");
+
+  const aa=$("#adminActions");
+  if(aa){ aa.classList.toggle("hide", !isAdmin());
+    aa.innerHTML = isAdmin() ? '<button class="btn primary" id="newPoll">+ Neue Umfrage</button>' : ''; }
+
+  const totalDabei = open.reduce((s,p)=>s+countsFor(p.id).ja,0);
+  $("#foot").textContent = open.length ? (open.length+" offene Umfrage"+(open.length>1?"n":"")+" · "+totalDabei+" mal dabei") : "";
+  const at=$("#adminToggle"); if(at){ at.textContent = isAdmin()?"Admin · abmelden":"Verwalten"; at.classList.toggle("on", isAdmin()); }
+}
+function renderDot(){
+  const d=$("#dot");
+  d.className="dot "+(store.status==="connecting"?"off":store.mode==="firebase"?(store.status==="online"?"on":store.status==="offline"?"off":"err"):(store.status==="error"?"err":"off"));
+}
+
+/* ---- Klicks ---- */
+document.addEventListener("click", async e=>{
+  const vb=e.target.closest(".p-vote button");
+  if(vb){ const row=e.target.closest(".poll"); if(row) vote(row.dataset.id, vb.dataset.c); return; }
+  const ab=e.target.closest(".p-admin [data-a]");
+  if(ab){ if(!isAdmin()) return; const row=e.target.closest(".poll"); const id=row.dataset.id;
+    const a=ab.dataset.a;
+    if(a==="close"){ await store.update("polls",id,{closed:true}); toast("Umfrage beendet"); }
+    else if(a==="open"){ await store.update("polls",id,{closed:false}); toast("Wieder offen"); }
+    else if(a==="reset"){ if(!confirm("Alle Stimmen dieser Umfrage zurücksetzen?")) return; await resetVotes(id); toast("Stimmen zurückgesetzt"); }
+    else if(a==="del"){ if(!confirm("Umfrage endgültig löschen?")) return; await deletePoll(id); toast("Gelöscht"); }
+    return; }
+  if(e.target.closest("#newPoll")){ openCreate(); return; }
+  if(e.target.closest("#adminToggle")){ if(isAdmin()){ setAdmin(false); render(); toast("Admin aus"); } else adminPrompt(); }
+});
+async function resetVotes(pollId){
+  const ids=store.pollvotes.filter(v=>v.pollId===pollId).map(v=>v.id);
+  for(const id of ids){ try{ await store.remove("pollvotes",id); }catch(_){} }
+  const m=myChoices(); delete m[pollId]; try{ localStorage.setItem(MYVOTE_KEY,JSON.stringify(m)); }catch(_){}
+}
+async function deletePoll(pollId){ await resetVotes(pollId); await store.remove("polls",pollId); }
+
+/* ---- Modal / Admin ---- */
+function modal(html,onMount){ closeModal(); const r=$("#modalRoot");
+  r.innerHTML='<div class="modal" id="mBg"><div class="sheet">'+html+'</div></div>';
+  $("#mBg").addEventListener("click",e=>{ if(e.target.id==="mBg") closeModal(); });
+  document.body.style.overflow="hidden"; if(onMount) onMount(r); }
+function closeModal(){ $("#modalRoot").innerHTML=""; document.body.style.overflow=""; }
+
+function adminPrompt(){
+  modal('<h3>Verwalten</h3>'+
+    '<div class="hint">Nur für Admins. Mit dem Verwaltungs-Code lassen sich Umfragen erstellen, beenden und löschen.</div>'+
+    '<label class="fld"><span>Code</span><input type="password" id="aCode" inputmode="numeric" autocomplete="off" placeholder="Code"></label>'+
+    '<button class="btn primary" id="aOk">Freischalten</button>'+
+    '<button class="btn" id="aNo" style="margin-top:0.5rem">Abbrechen</button>',
+    r=>{ const inp=$("#aCode",r); inp.focus(); $("#aNo",r).onclick=closeModal;
+      const go=async()=>{ const v=inp.value.trim();
+        if(v && (v===ADMIN_HASH || (await pinHash(v))===ADMIN_HASH)){ setAdmin(true); closeModal(); render(); toast("Admin an"); openCreate(); }
+        else toast("Code stimmt nicht"); };
+      $("#aOk",r).onclick=go; inp.addEventListener("keydown",e=>{ if(e.key==="Enter") go(); });
+    });
+}
+function openCreate(){
+  if(!isAdmin()) return;
+  modal('<h3>Neue Umfrage</h3>'+
+    '<label class="fld" style="margin-top:0.875rem"><span>Veranstaltung / Titel</span>'+
+      '<input type="text" id="cTitle" maxlength="80" placeholder="z. B. Sommerfest, Tatort-Abend"></label>'+
+    '<label class="fld"><span>Datum (optional)</span><input type="date" id="cDate"></label>'+
+    '<label class="fld"><span>Frage</span><input type="text" id="cQ" maxlength="120" value="Bist du dabei?"></label>'+
+    '<button class="btn primary" id="cOk">Umfrage starten</button>'+
+    '<button class="btn" id="cNo" style="margin-top:0.5rem">Abbrechen</button>',
+    r=>{ $("#cTitle",r).focus(); $("#cNo",r).onclick=closeModal;
+      $("#cOk",r).onclick=async()=>{ const title=$("#cTitle",r).value.trim(); if(!title) return toast("Titel fehlt");
+        try{ await store.add("polls",{ title, date:$("#cDate",r).value||"", q:($("#cQ",r).value.trim()||"Bist du dabei?"),
+          at:new Date().toISOString(), closed:false });
+          closeModal(); render(); toast("Umfrage gestartet"); }
+        catch(e){ console.error(e); toast("Konnte nicht erstellen"); } };
+    });
+}
+window.addEventListener("online", ()=>{ if(store.mode==="firebase"){ store.status="online"; renderDot(); } });
+window.addEventListener("offline", ()=>{ if(store.mode==="firebase"){ store.status="offline"; renderDot(); } });
+
+render(); store.connect();
+</script>
+</body>
+</html>
