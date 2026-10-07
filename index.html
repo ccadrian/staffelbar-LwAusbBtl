@@ -1024,7 +1024,7 @@ const DEFAULT_BAR_ID = "staffelbar";
    Getränk selbst, und eine 0 dort heißt "gibt es nur einzeln". */
 const DEFAULT_PACK_SIZE = 20;
 
-const APP_VERSION = "2.1";
+const APP_VERSION = "2.2";
 const SDK = "https://www.gstatic.com/firebasejs/10.13.2/";
 
 /* ---------------------------------------------------------------------
@@ -1878,12 +1878,12 @@ function applyText(mode){
    Reine Optik pro Gerät, jederzeit umstellbar. */
 const LS_SKIN = "staffelbar.skin";
 function currentSkin(){
-  try { return localStorage.getItem(LS_SKIN) === "classic" ? "classic" : "brutal"; }
-  catch(_){ return "brutal"; }
+  try { return localStorage.getItem(LS_SKIN) === "brutal" ? "brutal" : "classic"; }
+  catch(_){ return "classic"; }
 }
 function applySkin(mode){
-  const m = mode === "classic" ? "classic" : "brutal";
-  try { m === "brutal" ? localStorage.removeItem(LS_SKIN) : localStorage.setItem(LS_SKIN, "classic"); } catch(_){}
+  const m = mode === "brutal" ? "brutal" : "classic";
+  try { m === "classic" ? localStorage.removeItem(LS_SKIN) : localStorage.setItem(LS_SKIN, "brutal"); } catch(_){}
   if (m === "brutal") document.documentElement.dataset.skin = "brutal";
   else delete document.documentElement.dataset.skin;
   if (view === "stats") renderStats();
