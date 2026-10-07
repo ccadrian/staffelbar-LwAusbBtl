@@ -109,14 +109,14 @@ input:focus,textarea:focus{box-shadow:0 0 0 3.5px var(--ring)}
 <body>
 <header class="top">
   <div class="top-in">
-    <div class="brand">Umfrage <small id="sub">Bist du dabei?</small></div>
+    <div class="brand">Umfrage <small id="sub"></small></div>
     <div class="dot" id="dot" title="Verbindung"></div>
   </div>
 </header>
 
 <main class="wrap">
   <div class="anon">
-    <b>Anonym.</b> Niemand sieht, wer wie abgestimmt hat – nur die Anzahl zählt.
+    <b>Anonyme Umfragen</b> 
   </div>
 
   <div id="adminActions" class="hide" style="margin-bottom:1.125rem"></div>
@@ -332,7 +332,7 @@ function closeModal(){ $("#modalRoot").innerHTML=""; document.body.style.overflo
 
 function adminPrompt(){
   modal('<h3>Verwalten</h3>'+
-    '<div class="hint">Nur für Admins. Mit dem Verwaltungs-Code lassen sich Umfragen erstellen, beenden und löschen.</div>'+
+    '<div class="hint">Nur für das Hart Arbeitende Staffelbar Team.</div>'+
     '<label class="fld"><span>Code</span><input type="password" id="aCode" inputmode="numeric" autocomplete="off" placeholder="Code"></label>'+
     '<button class="btn primary" id="aOk">Freischalten</button>'+
     '<button class="btn" id="aNo" style="margin-top:0.5rem">Abbrechen</button>',
